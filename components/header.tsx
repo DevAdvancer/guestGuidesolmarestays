@@ -1,11 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect } from "react"
-import { useTheme } from "next-themes"
+import { useState } from "react"
 import { LifeBuoy, Phone } from "lucide-react"
-import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
-import { ShiningButton } from "@/components/ui/shining-button"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -21,19 +18,13 @@ interface HeaderProps {
 
 export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
   const [helpOpen, setHelpOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme, resolvedTheme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 py-4 max-w-2xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden">
               <Image
                 src="/logo.png"
                 alt="Solmaré Logo"
@@ -41,17 +32,16 @@ export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
                 className="object-cover"
               />
             </div>
-            <span className="font-semibold text-foreground">Solmaré Stays</span>
+            <span className="font-semibold text-lg text-gray-900">Solmaré Stays</span>
           </div>
           <div className="flex items-center gap-2">
-            {mounted && <CinematicThemeSwitcher />}
-            <ShiningButton
+            <Button
               onClick={() => setHelpOpen(true)}
-              className="px-4 py-2 h-9 text-sm"
+              className="px-5 py-2.5 h-10 text-base bg-blue-600 hover:bg-blue-700 text-white"
             >
-              <LifeBuoy className="w-4 h-4" />
+              <LifeBuoy className="w-5 h-5 mr-2" strokeWidth={1.5} />
               Help
-            </ShiningButton>
+            </Button>
           </div>
         </div>
       </header>
@@ -59,22 +49,22 @@ export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
       <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl">Need Assistance?</DialogTitle>
+            <DialogTitle className="text-2xl">Need Assistance?</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <p className="text-muted-foreground">
+            <p className="text-gray-600 text-base">
               For general questions, please contact your host on the platform you booked on (Airbnb/VRBO).
             </p>
             <a
               href={`tel:${contactPhone}`}
-              className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-destructive text-white font-medium rounded-lg hover:bg-destructive/90 transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-4 px-5 bg-blue-600 text-white font-medium text-base rounded-lg hover:bg-blue-700 transition-colors"
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-5 h-5" strokeWidth={1.5} />
               Call Management {contactPhone === "+18052426411" ? "(805) 242-6411" : contactPhone}
             </a>
           </div>
           <DialogClose asChild>
-            <Button variant="outline" className="w-full bg-transparent">
+            <Button variant="outline" className="w-full h-11 text-base bg-transparent">
               Close
             </Button>
           </DialogClose>

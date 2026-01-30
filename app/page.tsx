@@ -27,7 +27,7 @@ export default function PinEntryPage() {
     try {
       const result = await verifyPin(formData)
       if (result?.success && result.slug) {
-        router.push(`/guidebook/${result.slug}`)
+        router.push(`/guide/${result.slug}`)
         // Keep loading state true while navigating
         return
       }
@@ -44,9 +44,6 @@ export default function PinEntryPage() {
 
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="absolute top-4 right-4 z-50">
-        {mounted && <CinematicThemeSwitcher />}
-      </div>
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative w-40 h-40 rounded-full overflow-hidden mb-4">

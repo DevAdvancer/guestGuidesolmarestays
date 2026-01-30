@@ -38,6 +38,20 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* Sand Theme (Guest Guide) */
+  --sand-50: #fdfcfb;
+  --sand-100: #f7f4f0;
+  --sand-200: #ede8e1;
+  --sand-300: #ddd4c8;
+  --sand-400: #c7b8a5;
+  --sand-500: #b19f87;
+  --sand-600: #9a8570;
+  --sand-700: #7a6a5a;
+  --sand-800: #5a4f44;
+  --sand-900: #3a342e;
+  --brand-amber: #d97706;
+  --brand-orange: #ea580c;
+
   /* Loader Variables */
   --hu-font-geist: var(--font-geist);
   --hu-font-jetbrains: var(--font-jetbrains-mono);

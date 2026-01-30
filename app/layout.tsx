@@ -29,11 +29,16 @@ export const metadata: Metadata = {
   generator: 'v0.app'
 }
 
-export default function RootLayout({
+import { initializeSystem } from "@/lib/auth-init";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Ensure critical system settings and admin user exist on startup
+  await initializeSystem();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
