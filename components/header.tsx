@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { LifeBuoy, Phone } from "lucide-react"
 import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
+import { ShiningButton } from "@/components/ui/shining-button"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -31,8 +32,8 @@ export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
     <>
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="relative w-8 h-8 rounded-full overflow-hidden">
+          <div className="flex items-center gap-4">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden">
               <Image
                 src="/logo.png"
                 alt="Solmaré Logo"
@@ -40,19 +41,17 @@ export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
                 className="object-cover"
               />
             </div>
-            <span className="font-semibold text-foreground">Solmaré</span>
+            <span className="font-semibold text-foreground">Solmaré Stays</span>
           </div>
           <div className="flex items-center gap-2">
             {mounted && <CinematicThemeSwitcher />}
-            <Button
-              variant="outline"
-              size="sm"
+            <ShiningButton
               onClick={() => setHelpOpen(true)}
-              className="gap-2"
+              className="px-4 py-2 h-9 text-sm"
             >
               <LifeBuoy className="w-4 h-4" />
               Help
-            </Button>
+            </ShiningButton>
           </div>
         </div>
       </header>

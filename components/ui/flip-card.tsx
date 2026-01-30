@@ -33,7 +33,7 @@ export default function CardFlip({
 
   // Default Front Animation
   const DefaultFrontAnimation = () => (
-    <div className="absolute inset-0 flex items-center justify-center pt-20">
+    <div className="absolute inset-0 flex items-center justify-center pb-10">
       <div className="relative flex h-[100px] w-[200px] flex-col items-center justify-center gap-2">
         {[...Array(6)].map((_, i) => (
           <div
@@ -54,7 +54,7 @@ export default function CardFlip({
         <div className="absolute inset-0 flex items-center justify-center">
           <div
             className={cn(
-              "h-12 w-12 rounded-xl",
+              "h-24 w-24 rounded-2xl",
               "from-primary via-primary/90 to-primary/80 bg-gradient-to-br",
               "flex items-center justify-center",
               "shadow-primary/25 shadow-lg",
@@ -62,7 +62,7 @@ export default function CardFlip({
               "transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"
             )}
           >
-            <Icon className="h-6 w-6 text-white" />
+            <Icon className="h-12 w-12 text-white" />
           </div>
         </div>
       </div>
@@ -154,48 +154,48 @@ export default function CardFlip({
 
           <div className="relative z-10 flex-1 space-y-5 flex flex-col justify-center items-center text-center">
             <div className="space-y-2 w-full">
-              <div className="mb-2 flex items-center justify-center gap-2">
-                <div className="from-primary via-primary/90 to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
-                  <Icon className="h-4 w-4 text-white" />
+              <div className="flex flex-col items-center justify-center gap-3">
+                <div className="from-primary via-primary/90 to-primary/80 flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br shadow-md">
+                  <Icon className="h-12 w-12 text-white" />
                 </div>
-                <h3 className="text-lg leading-snug font-semibold tracking-tight text-zinc-900 transition-all duration-500 ease-out group-hover:translate-y-[-2px] dark:text-white">
+                <h3 className="text-xl leading-snug font-semibold tracking-tight text-center text-zinc-900 transition-all duration-500 ease-out group-hover:translate-y-[-2px] dark:text-white">
                   {title}
                 </h3>
               </div>
-              {description && (
-                <p className="line-clamp-4 text-sm tracking-tight text-zinc-600 transition-all duration-500 ease-out group-hover:translate-y-[-2px] dark:text-zinc-400">
-                  {description}
-                </p>
-              )}
             </div>
-
-            {backContent}
-
-            {features.length > 0 && (
-              <div className="space-y-2.5">
-                {features.map((feature, index) => {
-                  const icons = [Copy, Code2, Rocket, Zap]
-                  const IconComponent = icons[index % icons.length]
-                  return (
-                    <div
-                      key={feature}
-                      className="flex items-center gap-3 text-sm text-zinc-700 transition-all duration-500 dark:text-zinc-300"
-                      style={{
-                        transform: isFlipped ? "translateX(0)" : "translateX(-10px)",
-                        opacity: isFlipped ? 1 : 0,
-                        transitionDelay: `${index * 100 + 200}ms`,
-                      }}
-                    >
-                      <div className="bg-primary/10 dark:bg-primary/20 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md">
-                        <IconComponent className="text-primary h-3 w-3" />
-                      </div>
-                      <span className="font-medium">{feature}</span>
-                    </div>
-                  )
-                })}
-              </div>
+            {description && (
+              <p className="line-clamp-4 text-sm tracking-tight text-zinc-600 transition-all duration-500 ease-out group-hover:translate-y-[-2px] dark:text-zinc-400">
+                {description}
+              </p>
             )}
           </div>
+
+          {backContent}
+
+          {features.length > 0 && (
+            <div className="space-y-2.5">
+              {features.map((feature, index) => {
+                const icons = [Copy, Code2, Rocket, Zap]
+                const IconComponent = icons[index % icons.length]
+                return (
+                  <div
+                    key={feature}
+                    className="flex items-center gap-3 text-sm text-zinc-700 transition-all duration-500 dark:text-zinc-300"
+                    style={{
+                      transform: isFlipped ? "translateX(0)" : "translateX(-10px)",
+                      opacity: isFlipped ? 1 : 0,
+                      transitionDelay: `${index * 100 + 200}ms`,
+                    }}
+                  >
+                    <div className="bg-primary/10 dark:bg-primary/20 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md">
+                      <IconComponent className="text-primary h-3 w-3" />
+                    </div>
+                    <span className="font-medium">{feature}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
 
           <div className="relative z-10 mt-auto border-t border-slate-200 pt-4 dark:border-zinc-800">
             <div

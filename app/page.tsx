@@ -1,16 +1,18 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { verifyPin } from "@/actions/verify-pin"
-import { Loader2 } from "lucide-react"
+import { Loader } from "@/components/ui/loader"
 
 export default function PinEntryPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
@@ -18,6 +20,12 @@ export default function PinEntryPage() {
 
     try {
       const result = await verifyPin(formData)
+      if (result?.success && result.slug) {
+        router.push(`/guidebook/${result.slug}`)
+        // Keep loading state true while navigating
+        return
+      }
+
       if (result?.error) {
         setError(result.error)
         setIsLoading(false)
@@ -86,7 +94,7 @@ export default function PinEntryPage() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader size="sm" className="mr-2" />
                     Verifying...
                   </>
                 ) : (
