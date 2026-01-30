@@ -49,7 +49,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             description={`Password: ${wifi.password}`}
             color="#3b82f6"
             icon={Wifi}
-            actionLabel={copiedWifi ? "Copied!" : "Copy Password"}
+            actionLabel={copiedWifi ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(wifi.password, setCopiedWifi)}
           />
         </div>
@@ -62,7 +62,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             description={`Your code: ${doorCode}`}
             color="#8b5cf6"
             icon={KeyRound}
-            actionLabel={copiedDoor ? "Copied!" : "Copy Code"}
+            actionLabel={copiedDoor ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(doorCode, setCopiedDoor)}
           />
         </div>

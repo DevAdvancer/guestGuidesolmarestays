@@ -3,7 +3,8 @@
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
-import { LifeBuoy, Phone, Sun, Moon } from "lucide-react"
+import { LifeBuoy, Phone } from "lucide-react"
+import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -42,21 +43,7 @@ export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
             <span className="font-semibold text-foreground">Solmaré</span>
           </div>
           <div className="flex items-center gap-2">
-            {mounted && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-                className="h-9 w-9"
-              >
-                {resolvedTheme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-                <span className="sr-only">Toggle theme</span>
-              </Button>
-            )}
+            {mounted && <CinematicThemeSwitcher />}
             <Button
               variant="outline"
               size="sm"

@@ -45,9 +45,9 @@ export default function CardFlip({
               "opacity-0"
             )}
             style={{
-              width: `${60 + Math.random() * 40}%`,
+              width: `${60 + (i * 13) % 40}%`,
               animationDelay: `${i * 0.2}s`,
-              marginLeft: `${Math.random() * 20}%`,
+              marginLeft: `${(i * 7) % 20}%`,
             }}
           />
         ))}
@@ -152,9 +152,9 @@ export default function CardFlip({
         >
           <div className="from-primary/5 dark:from-primary/10 absolute inset-0 rounded-2xl bg-gradient-to-br via-transparent to-blue-500/5 dark:to-blue-500/10" />
 
-          <div className="relative z-10 flex-1 space-y-5">
-            <div className="space-y-2">
-              <div className="mb-2 flex items-center gap-2">
+          <div className="relative z-10 flex-1 space-y-5 flex flex-col justify-center items-center text-center">
+            <div className="space-y-2 w-full">
+              <div className="mb-2 flex items-center justify-center gap-2">
                 <div className="from-primary via-primary/90 to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
                   <Icon className="h-4 w-4 text-white" />
                 </div>
