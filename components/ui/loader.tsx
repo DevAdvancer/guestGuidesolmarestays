@@ -32,18 +32,12 @@ export interface LoaderProps
 
 const Loader = React.forwardRef<SVGSVGElement, LoaderProps>(
   ({ className, size, variant, ...props }, ref) => {
-    const [isMounted, setIsMounted] = React.useState(false);
-
-    React.useEffect(() => {
-      setIsMounted(true);
-    }, []);
-
     return (
       <svg
         ref={ref}
         className={cn(
           loaderVariants({ size, variant }),
-          isMounted && "animate-spin",
+          "animate-spin",
           className,
         )}
         xmlns="http://www.w3.org/2000/svg"
