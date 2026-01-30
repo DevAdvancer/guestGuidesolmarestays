@@ -57,9 +57,8 @@ export default function CardFlip({
               "h-24 w-24 rounded-2xl",
               "from-primary via-primary/90 to-primary/80 bg-gradient-to-br",
               "flex items-center justify-center",
-              "shadow-primary/25 shadow-lg",
-              "animate-pulse",
-              "transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"
+              "shadow-primary/25 shadow-md",
+              "transition-all duration-500 group-hover:scale-110 group-hover:rotate-6"
             )}
           >
             <Icon className="h-12 w-12 text-white" />

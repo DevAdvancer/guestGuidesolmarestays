@@ -13,6 +13,7 @@ import { RulesRow } from "./components/rules-row";
 import { ManualAccordion } from "./components/manual-accordion";
 import { EmergencySection } from "./components/emergency-section";
 import { ContactModal } from "./components/contact-modal";
+import { HeroHelpButton } from "./components/hero-help-button";
 
 interface GuidePageProps {
   params: Promise<{ id: string }>;
@@ -78,20 +79,32 @@ export default async function GuidePage({ params }: GuidePageProps) {
       {/* Sticky Header */}
       <Header contactPhone={property.hostPhone || undefined} />
 
-      {/* Hero Section */}
-      <section className="relative h-64 sm:h-80">
+      {/* Hero Section - Fullscreen style with centered content */}
+      <section className="relative min-h-[100dvh] flex items-center justify-start mt-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${property.heroImage || '/images/hero-property.jpg'})`,
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+          {/* Main dark overlay for text readability */}
+          <div className="absolute inset-0 bg-black/40" />
+          {/* Gradient at bottom for smooth transition */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
-        <div className="absolute inset-0 flex items-end justify-center p-6">
-          <div className="text-white text-center">
-            <h1 className="text-3xl font-bold mb-1">{property.title}</h1>
-            <p className="text-white/80">{property.subtitle || "Your guide to a perfect stay"}</p>
+
+        <div className="relative z-10 flex flex-col items-start justify-center p-6 md:p-12 lg:p-20 text-left w-full h-full space-y-8 pt-20 max-w-7xl mx-auto">
+          <div className="space-y-4 max-w-5xl">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white tracking-tight text-balance leading-tight drop-shadow-md">
+              {property.title}
+            </h1>
+            <p className="text-2xl md:text-3xl text-white/90 font-medium max-w-3xl text-balance drop-shadow-sm">
+              {property.subtitle || "Your guide to a perfect stay"}
+            </p>
+          </div>
+
+          <div className="pt-4">
+            <HeroHelpButton contactPhone={property.hostPhone || undefined} />
           </div>
         </div>
       </section>
