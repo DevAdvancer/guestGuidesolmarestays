@@ -1,18 +1,24 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { verifyPin } from "@/actions/verify-pin"
 import { Loader } from "@/components/ui/loader"
+import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
 
 export default function PinEntryPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true)
@@ -38,6 +44,9 @@ export default function PinEntryPage() {
 
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+      <div className="absolute top-4 right-4 z-50">
+        {mounted && <CinematicThemeSwitcher />}
+      </div>
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative w-40 h-40 rounded-full overflow-hidden mb-4">
