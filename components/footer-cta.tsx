@@ -3,7 +3,13 @@ import Link from "next/link"
 import { MapPinned } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export function FooterCTA() {
+interface FooterCTAProps {
+  guideLink?: string
+}
+
+export function FooterCTA({ guideLink }: FooterCTAProps) {
+  if (!guideLink) return null;
+
   return (
     <section className="relative h-64 mt-8">
       <Image

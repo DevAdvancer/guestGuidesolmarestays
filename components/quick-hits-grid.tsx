@@ -1,15 +1,18 @@
 "use client"
 
-import React from "react"
-
-import { useState, useEffect } from "react"
 import { Wifi, KeyRound, MapPin, Clock, Check, Copy } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from "react"
 
-const WIFI_NETWORK = "California"
-const WIFI_PASSWORD = "Rudi2024!"
-const DOOR_CODE = "1512"
-const ADDRESS = "155 San Antonia Ave, Avila Beach"
+interface QuickHitsProps {
+  wifi: {
+    network: string
+    password: string
+  }
+  doorCode: string
+  address: string
+  checkOutTime: string
+}
 
 function CopyableCard({
   icon: Icon,
@@ -66,12 +69,12 @@ function CopyableCard({
   )
 }
 
-function LocationCard() {
+function LocationCard({ address }: { address: string }) {
   const handleDirections = () => {
-    const encodedAddress = encodeURIComponent(ADDRESS)
+    const encodedAddress = encodeURIComponent(address)
     const userAgent = navigator.userAgent.toLowerCase()
     const isIOS = /iphone|ipad|ipod/.test(userAgent)
-    
+
     if (isIOS) {
       window.location.href = `http://maps.apple.com/?q=${encodedAddress}`
     } else {
@@ -87,14 +90,14 @@ function LocationCard() {
       <CardContent className="p-4 flex flex-col items-center text-center min-h-[120px] justify-center">
         <MapPin className="w-8 h-8 text-primary mb-2" />
         <p className="text-sm text-muted-foreground">Location</p>
-        <p className="font-semibold text-foreground text-sm leading-tight">{ADDRESS}</p>
+        <p className="font-semibold text-foreground text-sm leading-tight">{address}</p>
         <p className="text-xs text-primary mt-2">Get Directions →</p>
       </CardContent>
     </Card>
   )
 }
 
-function CheckoutCard() {
+function CheckoutCard({ time }: { time: string }) {
   const handleClick = () => {
     window.location.hash = "departure-section"
   }
@@ -107,32 +110,32 @@ function CheckoutCard() {
       <CardContent className="p-4 flex flex-col items-center text-center min-h-[120px] justify-center">
         <Clock className="w-8 h-8 text-primary mb-2" />
         <p className="text-sm text-muted-foreground">Check-Out</p>
-        <p className="font-semibold text-2xl text-foreground">11:00 AM</p>
+        <p className="font-semibold text-2xl text-foreground">{time}</p>
         <p className="text-xs text-primary mt-2">View Instructions →</p>
       </CardContent>
     </Card>
   )
 }
 
-export function QuickHitsGrid() {
+export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHitsProps) {
   return (
     <section>
       <div className="grid grid-cols-2 gap-3">
         <CopyableCard
           icon={Wifi}
-          title={`WiFi: ${WIFI_NETWORK}`}
-          subtitle={WIFI_PASSWORD}
-          copyValue={WIFI_PASSWORD}
+          title={`WiFi: ${wifi.network}`}
+          subtitle={wifi.password}
+          copyValue={wifi.password}
         />
         <CopyableCard
           icon={KeyRound}
           title="Door Code"
-          subtitle={DOOR_CODE}
-          copyValue={DOOR_CODE}
+          subtitle={doorCode}
+          copyValue={doorCode}
           largeSubtitle
         />
-        <LocationCard />
-        <CheckoutCard />
+        <LocationCard address={address} />
+        <CheckoutCard time={checkOutTime} />
       </div>
     </section>
   )

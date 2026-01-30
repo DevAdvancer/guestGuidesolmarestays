@@ -13,7 +13,11 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 
-export function Header() {
+interface HeaderProps {
+  contactPhone?: string
+}
+
+export function Header({ contactPhone = "+18052426411" }: HeaderProps) {
   const [helpOpen, setHelpOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
@@ -76,11 +80,11 @@ export function Header() {
               For general questions, please contact your host on the platform you booked on (Airbnb/VRBO).
             </p>
             <a
-              href="tel:+18052426411"
+              href={`tel:${contactPhone}`}
               className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-destructive text-white font-medium rounded-lg hover:bg-destructive/90 transition-colors"
             >
               <Phone className="w-5 h-5" />
-              Call Management (805) 242-6411
+              Call Management {contactPhone === "+18052426411" ? "(805) 242-6411" : contactPhone}
             </a>
           </div>
           <DialogClose asChild>

@@ -1,11 +1,17 @@
 import Image from "next/image"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  title: string
+  subtitle: string
+  heroImage: string
+}
+
+export function HeroSection({ title, subtitle, heroImage }: HeroSectionProps) {
   return (
     <section className="relative h-64 sm:h-80">
       <Image
-        src="/images/hero-property.jpg"
-        alt="Oceanview Retreat property"
+        src={heroImage}
+        alt={title}
         fill
         className="object-cover"
         priority
@@ -14,9 +20,9 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
       <div className="absolute inset-0 flex flex-col items-center justify-end pb-8 px-4 text-center">
         <h1 className="text-3xl sm:text-4xl font-bold text-white text-balance">
-          Welcome to The Hummingbird House
+          {title}
         </h1>
-        <p className="text-white/90 mt-2 text-lg">Your guide to a perfect stay</p>
+        <p className="text-white/90 mt-2 text-lg">{subtitle}</p>
       </div>
     </section>
   )
