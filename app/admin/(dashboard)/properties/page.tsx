@@ -5,6 +5,7 @@ import { desc } from "drizzle-orm";
 import { Building2, Plus, Pencil, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeletePropertyButton } from "./components/delete-property-button";
+import { DuplicatePropertyButton } from "./components/duplicate-property-button";
 
 async function getAllProperties() {
   return await db
@@ -83,6 +84,7 @@ export default async function PropertiesListPage() {
                     <Pencil className="h-4 w-4" />
                   </Link>
                 </Button>
+                <DuplicatePropertyButton propertyId={property.id} />
                 <DeletePropertyButton propertyId={property.id} propertyTitle={property.title} />
               </div>
             </div>

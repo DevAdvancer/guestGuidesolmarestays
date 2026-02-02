@@ -4,15 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { logoutAction } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { User, LogOut, ChevronDown, Menu } from "lucide-react";
+import { User, ChevronDown, Menu } from "lucide-react";
 import Link from "next/link";
+import { ProfileDialog } from "./profile-dialog";
 
 interface AdminHeaderProps {
   user: {
@@ -54,34 +48,18 @@ export function AdminHeader({ user }: AdminHeaderProps) {
 
         {/* User Menu */}
         <div className="hidden lg:flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex items-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-              >
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                  <User className="h-4 w-4 text-gray-600" />
-                </div>
-                <span className="font-medium">{user.email}</span>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem className="text-gray-600">
-                <User className="h-4 w-4 mr-2" />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleLogout}
-                className="text-red-600 focus:text-red-600 focus:bg-red-50"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ProfileDialog user={user}>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                <User className="h-4 w-4 text-gray-600" />
+              </div>
+              <span className="font-medium">{user.email}</span>
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </ProfileDialog>
         </div>
       </div>
 

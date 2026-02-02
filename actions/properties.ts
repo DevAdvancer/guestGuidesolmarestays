@@ -350,3 +350,105 @@ export async function savePropertyComplete(propertyId: string, data: CompletePro
     throw error;
   }
 }
+
+// ============================================
+// DUPLICATE ACTION
+// ============================================
+
+export async function duplicateProperty(propertyId: string) {
+  try {
+    // 1. Get source property
+    const [sourceProperty] = await db.select().from(properties).where(eq(properties.id, propertyId));
+    if (!sourceProperty) throw new Error("Property not found");
+
+    // 2. Create new property
+    const [newProperty] = await db.insert(properties).values({
+      title: `Copy of ${sourceProperty.title}`,
+      subtitle: sourceProperty.subtitle,
+      // description: sourceProperty.description, // Not in schema
+      address: sourceProperty.address,
+      heroImage: sourceProperty.heroImage,
+      hostName: sourceProperty.hostName,
+      hostPhone: sourceProperty.hostPhone,
+      hostEmail: sourceProperty.hostEmail,
+      // hostAvatar: sourceProperty.hostAvatar, // Not in schema
+      wifiNetwork: sourceProperty.wifiNetwork,
+      wifiPassword: sourceProperty.wifiPassword,
+      doorCode: sourceProperty.doorCode,
+      // checkInTime: sourceProperty.checkInTime, // Not in schema
+      checkOutTime: sourceProperty.checkOutTime,
+      localGuideLink: sourceProperty.localGuideLink,
+      pin: Math.floor(1000 + Math.random() * 9000).toString(), // Generate new 4-digit PIN
+      isActive: false, // Default to inactive
+    }).returning();
+
+    // 3. Copy House Rules
+    const sourceRules = await db.select().from(houseRules).where(eq(houseRules.propertyId, propertyId));
+    if (sourceRules.length > 0) {
+      await db.insert(houseRules).values(
+        sourceRules.map(rule => ({
+          propertyId: newProperty.id,
+          label: rule.label,
+          icon: rule.icon,
+          sortOrder: rule.sortOrder,
+        }))
+      );
+    }
+
+    // 4. Copy Emergency Items
+    const sourceEmergency = await db.select().from(emergencyItems).where(eq(emergencyItems.propertyId, propertyId));
+    if (sourceEmergency.length > 0) {
+      await db.insert(emergencyItems).values(
+        sourceEmergency.map(item => ({
+          propertyId: newProperty.id,
+          title: item.title,
+          description: item.description,
+          icon: item.icon,
+          actionLabel: item.actionLabel,
+          action: item.action,
+          link: item.link,
+          address: item.address,
+          urgent: item.urgent,
+          sortOrder: item.sortOrder,
+        }))
+      );
+    }
+
+    // 5. Copy Manual Sections and Items
+    const sourceSections = await db.select().from(manualSections).where(eq(manualSections.propertyId, propertyId));
+
+    // We need to do this sequentially to keep item relationships
+    for (const section of sourceSections) {
+      const [newSection] = await db.insert(manualSections).values({
+        propertyId: newProperty.id,
+        title: section.title,
+        subtitle: section.subtitle,
+        icon: section.icon,
+        checklist: section.checklist,
+        sortOrder: section.sortOrder,
+      }).returning();
+
+      const sourceItems = await db.select().from(manualItems).where(eq(manualItems.sectionId, section.id));
+      if (sourceItems.length > 0) {
+        await db.insert(manualItems).values(
+          sourceItems.map(item => ({
+            sectionId: newSection.id,
+            label: item.label,
+            value: item.value,
+            icon: item.icon,
+            bullets: item.bullets,
+            highlight: item.highlight,
+            sortOrder: item.sortOrder,
+          }))
+        );
+      }
+    }
+
+    revalidatePath("/admin/properties");
+    return { success: true, newPropertyId: newProperty.id };
+
+  } catch (error) {
+    console.error("Failed to duplicate property:", error);
+    throw error;
+  }
+}

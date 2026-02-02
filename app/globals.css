@@ -183,4 +183,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Enforce pointer cursor for interactive elements */
+  button,
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  a,
+  summary,
+  [role='button'] {
+    @apply cursor-pointer;
+  }
 }
