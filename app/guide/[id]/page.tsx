@@ -81,20 +81,25 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
       {/* Hero Section - Fullscreen style with centered content */}
       {/* Hero Section - Layered Design */}
-      <section className="relative h-[85vh] w-full">
+      {/* Hero Section - Layered Design */}
+      <section className="relative h-[85vh] w-full z-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${property.heroImage || '/images/hero-property.jpg'})`,
           }}
         >
-          {/* Main dark overlay for text readability (optional, kept light for image focus) */}
+          {/* Main dark overlay for text readability */}
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
+      </section>
 
-        {/* Floating White Content Box - Overlapping Bottom Edge */}
-        <div className="absolute bottom-0 left-1/2 z-20 w-[90%] max-w-4xl -translate-x-1/2 translate-y-1/2 rounded-3xl bg-white p-8 text-center shadow-xl md:p-12">
-          <div className="space-y-4">
+      {/* Overlapping Content Wrapper */}
+      <div className="relative z-10 -mt-32 flex flex-col items-center px-4 pb-8 space-y-8">
+
+        {/* Floating White Content Box */}
+        <div className="w-[90%] max-w-4xl rounded-3xl bg-white p-8 text-center shadow-xl md:p-12">
+          <div className="flex min-h-[200px] flex-col justify-center space-y-4">
             <h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 md:text-6xl text-balance">
               {property.title}
             </h1>
@@ -107,30 +112,30 @@ export default async function GuidePage({ params }: GuidePageProps) {
             <HeroHelpButton contactPhone={property.hostPhone || undefined} />
           </div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <main className="px-4 pb-8 pt-40 max-w-2xl mx-auto space-y-8">
-        {/* Quick Info Cards with Flip Effect */}
-        <QuickHitsGrid
-          wifi={{
-            network: property.wifiNetwork || "Not configured",
-            password: property.wifiPassword || "",
-          }}
-          doorCode={property.doorCode || "Contact Host"}
-          address={property.address}
-          checkOutTime={property.checkOutTime || "11:00 AM"}
-        />
+        {/* Main Content Info Grid */}
+        <main className="w-full max-w-2xl mx-auto space-y-8">
+          {/* Quick Info Cards with Flip Effect */}
+          <QuickHitsGrid
+            wifi={{
+              network: property.wifiNetwork || "Not configured",
+              password: property.wifiPassword || "",
+            }}
+            doorCode={property.doorCode || "Contact Host"}
+            address={property.address}
+            checkOutTime={property.checkOutTime || "11:00 AM"}
+          />
 
-        {/* House Rules Row */}
-        {rules.length > 0 && <RulesRow rules={rules} />}
+          {/* House Rules Row */}
+          {rules.length > 0 && <RulesRow rules={rules} />}
 
-        {/* House Manual Accordions */}
-        {sections.length > 0 && <ManualAccordion sections={sections} />}
+          {/* House Manual Accordions */}
+          {sections.length > 0 && <ManualAccordion sections={sections} />}
 
-        {/* Emergency Section */}
-        {emergency.length > 0 && <EmergencySection items={emergency} />}
-      </main>
+          {/* Emergency Section */}
+          {emergency.length > 0 && <EmergencySection items={emergency} />}
+        </main>
+      </div>
 
       {/* Local Guide Footer CTA */}
       <LocalGuideFooter link={property.localGuideLink || "#"} />
