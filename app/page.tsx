@@ -1,46 +1,56 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useTransition } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { verifyPin } from "@/actions/verify-pin"
-import { Loader } from "@/components/ui/loader"
 import { Loader2 } from "lucide-react"
-import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
 
 export default function PinEntryPage() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
+  const [isNavigating, setIsNavigating] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // Combined loading state
+  const isLoading = isPending || isNavigating
 
-  async function handleSubmit(formData: FormData) {
-    setIsLoading(true)
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     setError(null)
 
-    try {
-      const result = await verifyPin(formData)
-      if (result?.success && result.slug) {
-        router.push(`/guide/${result.slug}`)
-        // Keep loading state true while navigating
-        return
-      }
+    const formData = new FormData(e.currentTarget)
+    const pin = formData.get("pin") as string
 
-      if (result?.error) {
-        setError(result.error)
-        setIsLoading(false)
-      }
-    } catch (e) {
-      setError("Something went wrong. Please try again.")
-      setIsLoading(false)
+    if (!pin) {
+      setError("Please enter a PIN.")
+      return
     }
+
+    startTransition(async () => {
+      try {
+        // Add minimum loading time for better UX feedback
+        const [result] = await Promise.all([
+          verifyPin(formData),
+          new Promise(resolve => setTimeout(resolve, 800))
+        ])
+
+        if (result?.success && result.slug) {
+          setIsNavigating(true)
+          router.push(`/guide/${result.slug}`)
+          return
+        }
+
+        if (result?.error) {
+          setError(result.error)
+        }
+      } catch (err) {
+        setError("Something went wrong. Please try again.")
+      }
+    })
   }
 
   return (
@@ -72,7 +82,7 @@ export default function PinEntryPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form action={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Input
                   type="text"
@@ -84,6 +94,7 @@ export default function PinEntryPage() {
                   inputMode="numeric"
                   maxLength={4}
                   autoComplete="off"
+                  disabled={isLoading}
                 />
               </div>
 
