@@ -35,7 +35,20 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
   }
 
   const handleCheckout = () => {
-    window.location.hash = "departure-section"
+    const element = document.getElementById("departure-section")
+    if (element) {
+      // Smooth scroll to the element
+      element.scrollIntoView({ behavior: "smooth", block: "center" })
+
+      // Update URL without triggering default browser jump
+      history.pushState(null, "", "#departure-section")
+
+      // Dispatch hashchange event so ManualAccordion knows to open the item
+      window.dispatchEvent(new HashChangeEvent("hashchange"))
+    } else {
+      // Fallback
+      window.location.hash = "departure-section"
+    }
   }
 
   return (

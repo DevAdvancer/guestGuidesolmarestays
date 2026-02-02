@@ -22,7 +22,7 @@ export function LocalGuideFooter({ link }: LocalGuideFooterProps) {
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Live Like a Local</h2>
         <p className="text-white/80 mb-4">Discover the best spots in town</p>
-        <Button asChild size="lg" className="gap-2 bg-white text-black hover:bg-gray-100 border-none">
+        <Button asChild size="lg" className="gap-2 bg-[#556D78] text-white hover:bg-[#556D78]/90 border-none rounded-full shadow-lg">
           <Link href={link}>
             <MapPinned className="w-5 h-5" />
             Explore Dining & Activities

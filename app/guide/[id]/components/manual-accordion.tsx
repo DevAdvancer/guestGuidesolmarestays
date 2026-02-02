@@ -5,38 +5,87 @@ import * as Icons from "lucide-react";
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ManualSection, ManualItem } from "@/lib/schema";
+import { useEffect, useState } from "react";
 
 interface ManualAccordionProps {
   sections: (ManualSection & { items: ManualItem[] })[];
 }
 
 export function ManualAccordion({ sections }: ManualAccordionProps) {
-  return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      <h2 className="text-xl font-semibold text-gray-900 p-6 pb-0">House Manual</h2>
+  const [openItem, setOpenItem] = useState<string>("");
 
-      <Accordion type="single" collapsible className="px-6 pb-4">
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === "#departure-section") {
+        // Find departure section
+        const departureSection = sections.find(s =>
+          s.title.toLowerCase().includes("departure") ||
+          s.title.toLowerCase().includes("check-out") ||
+          s.title.toLowerCase().includes("checkout")
+        );
+
+        if (departureSection) {
+          setOpenItem(String(departureSection.id));
+          // Wait for accordion to open then scroll
+          setTimeout(() => {
+            const element = document.getElementById("departure-section");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, 100);
+        }
+      }
+    };
+
+    // Check on mount
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [sections]);
+
+  return (
+    <div className="w-full">
+      <h2 className="text-xl font-semibold text-[#556D78] mb-6 px-2">House Manual</h2>
+
+      <Accordion
+        type="single"
+        collapsible
+        className="space-y-4"
+        value={openItem}
+        onValueChange={setOpenItem}
+      >
         {sections.map((section) => {
           const IconComponent = (Icons as any)[section.icon || "BookOpen"] || Icons.BookOpen;
+          const isDeparture = section.title.toLowerCase().includes("departure") ||
+            section.title.toLowerCase().includes("check-out") ||
+            section.title.toLowerCase().includes("checkout");
 
           return (
-            <AccordionItem key={section.id} value={String(section.id)} className="border-b border-gray-100 last:border-0">
-              <AccordionTrigger className="py-5 hover:no-underline group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center shrink-0 group-hover:bg-gray-100 transition-colors">
-                    <IconComponent className="h-6 w-6 text-gray-900" strokeWidth={1.5} />
+            <AccordionItem
+              key={section.id}
+              value={String(section.id)}
+              id={isDeparture ? "departure-section" : undefined}
+              className="bg-white rounded-2xl shadow-sm border-0 overflow-hidden"
+            >
+              <AccordionTrigger className="px-6 py-5 hover:no-underline group hover:bg-gray-50/50 transition-colors">
+                <div className="flex items-center gap-5 text-left">
+                  <div className="w-12 h-12 rounded-xl bg-[#556D78] flex items-center justify-center shrink-0 shadow-sm shadow-[#556D78]/20">
+                    <IconComponent className="h-6 w-6 text-white" strokeWidth={1.5} />
                   </div>
-                  <div className="text-left">
-                    <span className="font-medium text-lg text-gray-900">{section.title}</span>
+                  <div>
+                    <span className="font-semibold text-lg text-gray-900 block">{section.title}</span>
                     {section.subtitle && (
-                      <p className="text-base text-gray-500">{section.subtitle}</p>
+                      <p className="text-sm text-gray-500 mt-0.5 font-medium">{section.subtitle}</p>
                     )}
                   </div>
                 </div>
               </AccordionTrigger>
 
-              <AccordionContent className="pb-5">
-                <div className="space-y-4 pl-[64px]">
+              <AccordionContent className="px-6 pb-6 pt-0">
+                <div className="space-y-4 pl-[68px]">
                   {/* Items */}
                   {section.items.map((item) => {
                     const ItemIcon = (Icons as any)[item.icon || "Info"] || Icons.Info;
@@ -45,62 +94,69 @@ export function ManualAccordion({ sections }: ManualAccordionProps) {
                       <div
                         key={item.id}
                         className={cn(
-                          "flex gap-4 p-4 rounded-lg",
-                          item.highlight && "bg-gray-50 border border-gray-200"
+                          "relative group/item",
+                          item.highlight ? "bg-[#556D78]/5 p-4 rounded-xl border border-[#556D78]/10" : "py-2"
                         )}
                       >
-                        <ItemIcon className={cn(
-                          "h-6 w-6 shrink-0 mt-0.5",
-                          item.highlight ? "text-gray-900" : "text-gray-400"
-                        )} strokeWidth={1.5} />
-                        <div className="space-y-2">
-                          <p className={cn(
-                            "font-medium text-base",
-                            item.highlight ? "text-gray-900" : "text-gray-900"
-                          )}>
-                            {item.label}
-                            {item.highlight && (
-                              <span className="ml-2 text-xs bg-gray-900 text-white px-2 py-0.5 rounded">
-                                Important
-                              </span>
-                            )}
-                          </p>
-                          {item.value && (
-                            <p className="text-gray-600 text-base whitespace-pre-wrap">{item.value}</p>
-                          )}
+                        <div className="flex gap-4">
+                          <ItemIcon className={cn(
+                            "h-5 w-5 shrink-0 mt-0.5",
+                            item.highlight ? "text-[#556D78]" : "text-gray-400"
+                          )} strokeWidth={1.5} />
+                          <div className="space-y-2 flex-1">
+                            <div className="flex items-center gap-2">
+                              <p className={cn(
+                                "font-medium text-base",
+                                item.highlight ? "text-[#556D78]" : "text-gray-900"
+                              )}>
+                                {item.label}
+                              </p>
+                              {item.highlight && (
+                                <span className="text-[10px] font-bold uppercase tracking-wider bg-[#556D78] text-white px-2 py-0.5 rounded-full">
+                                  Important
+                                </span>
+                              )}
+                            </div>
 
-                          {/* Bullet Points */}
-                          {item.bullets && item.bullets.length > 0 && (
-                            <ul className="space-y-2 mt-3">
-                              {item.bullets.map((bullet, idx) => (
-                                <li key={idx} className="flex items-start gap-3 text-base text-gray-600">
-                                  <span className="text-gray-400 mt-1">•</span>
-                                  <span>{bullet}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                            {item.value && (
+                              <p className="text-gray-600 text-base whitespace-pre-wrap leading-relaxed">
+                                {item.value}
+                              </p>
+                            )}
+
+                            {/* Bullet Points */}
+                            {item.bullets && item.bullets.length > 0 && (
+                              <ul className="space-y-2 mt-3 bg-gray-50/80 p-4 rounded-lg">
+                                {item.bullets.map((bullet, idx) => (
+                                  <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#556D78]/40 mt-1.5 shrink-0" />
+                                    <span>{bullet}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );
                   })}
 
                   {section.items.length === 0 && (
-                    <p className="text-gray-400 text-base italic">No items in this section</p>
+                    <p className="text-gray-400 text-sm italic pl-9">No specific details listed.</p>
                   )}
 
                   {/* Checklist (for departure sections, etc.) */}
                   {section.checklist && section.checklist.length > 0 && (
-                    <div className="mt-5 p-5 bg-gray-50 rounded-lg">
-                      <h4 className="text-base font-medium text-gray-700 mb-4 flex items-center gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-green-600" strokeWidth={1.5} />
-                        Before You Leave
+                    <div className="mt-4 p-5 bg-[#556D78]/5 rounded-xl border border-[#556D78]/10">
+                      <h4 className="text-sm font-semibold text-[#556D78] mb-4 flex items-center gap-2 uppercase tracking-wide">
+                        <CheckCircle2 className="h-4 w-4" strokeWidth={2} />
+                        Action Items
                       </h4>
                       <ul className="space-y-3">
                         {section.checklist.map((item, idx) => (
-                          <li key={idx} className="flex items-center gap-4 text-base text-gray-600">
-                            <div className="w-6 h-6 rounded border-2 border-gray-300 shrink-0" />
-                            <span>{item}</span>
+                          <li key={idx} className="flex items-start gap-3 text-base text-gray-700 bg-white p-3 rounded-md shadow-sm border border-gray-100">
+                            <div className="w-5 h-5 rounded border-2 border-gray-300 shrink-0 mt-0.5" />
+                            <span className="leading-snug">{item}</span>
                           </li>
                         ))}
                       </ul>
