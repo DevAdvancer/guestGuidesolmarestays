@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Building2, Settings } from "lucide-react";
+import { Home, Building2, Settings, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: Home },
   { href: "/admin/properties", label: "Properties", icon: Building2 },
+  { href: "/admin/local-guide", label: "Local Guide", icon: MapPin },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

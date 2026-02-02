@@ -23,7 +23,7 @@ export function FooterCTA({ guideLink }: FooterCTAProps) {
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Live Like a Local</h2>
         <p className="text-white/80 mb-4">Discover the best spots in town</p>
         <Button asChild size="lg" className="gap-2">
-          <Link href="/local-guide">
+          <Link href="/local">
             <MapPinned className="w-5 h-5" />
             Explore Dining & Activities
           </Link>

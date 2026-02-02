@@ -154,3 +154,25 @@ export const emergencyItemsRelations = relations(emergencyItems, ({ one }) => ({
     references: [properties.id],
   }),
 }));
+
+// ============================================
+// LOCAL GUIDE VENDORS TABLE
+// ============================================
+export const localGuideVendors = pgTable("local_guide_vendors", {
+  id: serial("id").primaryKey(),
+  vendorName: text("vendor_name").notNull(),
+  category: text("category").notNull(), // 'coffee', 'dinner', 'play', 'shops'
+  isVipSponsor: boolean("is_vip_sponsor").default(false),
+  priceLevel: text("price_level").default("$"), // $, $$, $$$
+  iconType: text("icon_type").default("Coffee"), // Lucide icon name
+  description: text("description"), // Max 150 chars
+  vipDealText: text("vip_deal_text"), // Only for VIP sponsors
+  websiteUrl: text("website_url"),
+  googleMapsUrl: text("google_maps_url"),
+  sortOrder: integer("sort_order").default(0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type LocalGuideVendor = typeof localGuideVendors.$inferSelect;
+export type NewLocalGuideVendor = typeof localGuideVendors.$inferInsert;

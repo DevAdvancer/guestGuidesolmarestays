@@ -195,3 +195,47 @@
     @apply cursor-pointer;
   }
 }
+
+/* ============================================
+   LOCAL GUIDE THEME
+   ============================================ */
+:root {
+  --local-bg: #fdf9f8;
+  --local-card: #FFFFFF;
+  --local-primary: #556D78;
+  --local-secondary: #8BABA5;
+  --local-muted: #B1BFBF;
+  --local-text-dark: #333333;
+  --local-text-muted: #555555;
+}
+
+/* ============================================
+   FLIP CARD 3D TRANSFORMS
+   ============================================ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* ============================================
+   SCROLLBAR HIDE UTILITY
+   ============================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
