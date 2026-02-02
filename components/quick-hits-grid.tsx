@@ -60,7 +60,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             title="WiFi Access"
             subtitle={wifi.network}
             description={`Password: ${wifi.password}`}
-            color="#556D78"
+            color="#64748b"
             icon={Wifi}
             actionLabel={copiedWifi ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(wifi.password, setCopiedWifi)}
@@ -73,7 +73,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             title="Door Code"
             subtitle="Access PIN"
             description={`Your code: ${doorCode}`}
-            color="#556D78"
+            color="#64748b"
             icon={KeyRound}
             actionLabel={copiedDoor ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(doorCode, setCopiedDoor)}
@@ -86,7 +86,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             title="Location"
             subtitle="Property Address"
             description={address}
-            color="#556D78"
+            color="#64748b"
             icon={MapPin}
             actionLabel="Get Directions"
             onAction={handleDirections}
@@ -99,7 +99,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
             title="Check-Out"
             subtitle={checkOutTime}
             description="View departure checklist and instructions."
-            color="#556D78"
+            color="#64748b"
             icon={Clock}
             actionLabel="View Instructions"
             onAction={handleCheckout}

@@ -37,7 +37,7 @@ export default function CardFlip({
       <h3 className="text-xl font-bold tracking-tight text-[#556D78] mb-4 text-center">
         {title}
       </h3>
-      <div className="flex items-center justify-center rounded-2xl bg-slate-50 p-5 shadow-sm">
+      <div className="flex items-center justify-center rounded-2xl bg-blue-50 p-5 shadow-sm">
         <Icon className="h-10 w-10" style={{ color }} />
       </div>
       <p className="mt-4 text-sm font-medium text-zinc-500 text-center">
