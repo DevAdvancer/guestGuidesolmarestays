@@ -75,7 +75,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const { property, rules, sections, emergency } = data;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F5F5DC' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#fdf9f8' }}>
       {/* Sticky Header */}
       <Header contactPhone={property.hostPhone || undefined} />
 
@@ -97,19 +97,15 @@ export default async function GuidePage({ params }: GuidePageProps) {
       {/* Overlapping Content Wrapper */}
       <div className="relative z-10 -mt-32 flex flex-col items-center px-4 pb-8 space-y-8">
 
-        {/* Floating White Content Box */}
-        <div className="w-[90%] max-w-4xl rounded-3xl bg-white p-8 text-center shadow-xl md:p-12">
-          <div className="flex min-h-[200px] flex-col justify-center space-y-4">
-            <h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 md:text-6xl text-balance">
+        {/* Floating Transparent Content Box */}
+        <div className="w-[90%] max-w-4xl rounded-3xl bg-white/80 backdrop-blur-md p-8 text-center shadow-lg md:p-12 border border-white/50">
+          <div className="flex min-h-[160px] flex-col justify-center space-y-4">
+            <h1 className="text-4xl font-serif font-bold tracking-tight text-[#556D78] md:text-6xl text-balance">
               {property.title}
             </h1>
-            <p className="text-xl font-medium text-gray-600 md:text-2xl text-balance">
+            <p className="text-xl font-medium text-[#8BABA5] md:text-2xl text-balance">
               {property.subtitle || "Your guide to a perfect stay"}
             </p>
-          </div>
-
-          <div className="mt-8 flex justify-center">
-            <HeroHelpButton contactPhone={property.hostPhone || undefined} />
           </div>
         </div>
 

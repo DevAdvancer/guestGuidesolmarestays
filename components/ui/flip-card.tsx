@@ -31,12 +31,18 @@ export default function CardFlip({
 }: CardFlipProps) {
   const [isFlipped, setIsFlipped] = useState(false)
 
-  // Default Front Content (Simplified)
+  // Default Front Content (Centered layout with title on top)
   const DefaultFrontAnimation = () => (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="flex items-center justify-center rounded-2xl bg-slate-50 p-6 shadow-sm">
-        <Icon className="h-12 w-12" style={{ color }} />
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
+      <h3 className="text-xl font-bold tracking-tight text-[#556D78] mb-4 text-center">
+        {title}
+      </h3>
+      <div className="flex items-center justify-center rounded-2xl bg-slate-50 p-5 shadow-sm">
+        <Icon className="h-10 w-10" style={{ color }} />
       </div>
+      <p className="mt-4 text-sm font-medium text-zinc-500 text-center">
+        {subtitle}
+      </p>
     </div>
   )
 
@@ -77,22 +83,6 @@ export default function CardFlip({
           )}
         >
           {frontContent || <DefaultFrontAnimation />}
-
-          <div className="absolute right-0 bottom-0 left-0 p-6">
-            <div className="flex items-center justify-between gap-3">
-              <div className="space-y-1">
-                <h3 className="text-lg leading-snug font-medium tracking-tight text-zinc-900 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-white">
-                  {title}
-                </h3>
-                <p className="line-clamp-2 text-sm text-zinc-500 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-zinc-400">
-                  {subtitle}
-                </p>
-              </div>
-              {/* <div className="group/icon relative">
-                <Icon className="h-6 w-6 transition-all duration-300 group-hover/icon:scale-110" style={{ color }} />
-              </div> */}
-            </div>
-          </div>
         </div>
 
         {/* Back of card */}

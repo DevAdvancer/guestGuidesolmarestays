@@ -91,7 +91,7 @@ export function EmergencySection({ items }: EmergencySectionProps) {
                         className={cn(
                           "inline-flex items-center gap-2 mt-4 text-sm font-bold px-6 py-3 rounded-full transition-colors shadow-sm",
                           item.urgent
-                            ? "bg-red-600 text-white hover:bg-red-700"
+                            ? "bg-[#556D78] text-white hover:bg-[#4A5F69]"
                             : "bg-gray-900 text-white hover:bg-gray-800"
                         )}
                       >

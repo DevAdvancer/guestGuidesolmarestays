@@ -73,8 +73,8 @@ export function ManualAccordion({ sections }: ManualAccordionProps) {
             >
               <AccordionTrigger className="px-6 py-5 hover:no-underline group hover:bg-gray-50/50 transition-colors">
                 <div className="flex items-center gap-5 text-left">
-                  <div className="w-12 h-12 rounded-xl bg-[#556D78] flex items-center justify-center shrink-0 shadow-sm shadow-[#556D78]/20">
-                    <IconComponent className="h-6 w-6 text-white" strokeWidth={1.5} />
+                  <div className="w-12 h-12 flex items-center justify-center shrink-0">
+                    <IconComponent className="h-6 w-6 text-[#556D78]" strokeWidth={1.5} />
                   </div>
                   <div>
                     <span className="font-semibold text-lg text-gray-900 block">{section.title}</span>
