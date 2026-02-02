@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { verifyPin } from "@/actions/verify-pin"
 import { Loader } from "@/components/ui/loader"
+import { Loader2 } from "lucide-react"
 import CinematicThemeSwitcher from "@/components/ui/cinematic-theme-switcher"
 
 export default function PinEntryPage() {
@@ -100,8 +101,8 @@ export default function PinEntryPage() {
               >
                 {isLoading ? (
                   <>
-                    <Loader size="sm" className="mr-2" />
-                    Verifying...
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Verifying PIN...
                   </>
                 ) : (
                   "View Guidebook"
