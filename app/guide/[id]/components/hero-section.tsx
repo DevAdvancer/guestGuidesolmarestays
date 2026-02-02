@@ -13,7 +13,7 @@ export function HeroSection({ title, subtitle, heroImage, hostPhone }: HeroSecti
   const defaultImage = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80";
 
   return (
-    <section className="relative h-[70vh] min-h-[500px]">
+    <section className="relative h-[60vh] min-h-[500px]">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -22,7 +22,7 @@ export function HeroSection({ title, subtitle, heroImage, hostPhone }: HeroSecti
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
-      </div>
+      </div>  
 
       {/* Floating Content Box */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[90%] max-w-md">
