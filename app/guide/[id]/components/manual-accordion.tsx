@@ -13,6 +13,7 @@ interface ManualAccordionProps {
 
 export function ManualAccordion({ sections }: ManualAccordionProps) {
   const [openItem, setOpenItem] = useState<string>("");
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -153,12 +154,45 @@ export function ManualAccordion({ sections }: ManualAccordionProps) {
                         Action Items
                       </h4>
                       <ul className="space-y-3">
-                        {section.checklist.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-base text-gray-700 bg-white p-3 rounded-md shadow-sm border border-gray-100">
-                            <div className="w-5 h-5 rounded border-2 border-gray-300 shrink-0 mt-0.5" />
-                            <span className="leading-snug">{item}</span>
-                          </li>
-                        ))}
+                        {section.checklist.map((item, idx) => {
+                          const itemId = `${section.id}-${idx}`;
+                          const isChecked = checkedItems[itemId];
+
+                          return (
+                            <li
+                              key={idx}
+                              onClick={() => {
+                                setCheckedItems(prev => ({
+                                  ...prev,
+                                  [itemId]: !prev[itemId]
+                                }));
+                              }}
+                              className={cn(
+                                "flex items-start gap-3 p-3 rounded-md shadow-sm border transition-all cursor-pointer group hover:border-[#556D78]/30",
+                                isChecked
+                                  ? "bg-gray-50 border-gray-100"
+                                  : "bg-white border-gray-100"
+                              )}
+                            >
+                              <div className={cn(
+                                "mt-0.5 shrink-0 transition-colors",
+                                isChecked ? "text-[#556D78]" : "text-gray-300 group-hover:text-gray-400"
+                              )}>
+                                {isChecked ? (
+                                  <Icons.CheckSquare className="w-5 h-5" strokeWidth={2} />
+                                ) : (
+                                  <Icons.Square className="w-5 h-5" strokeWidth={2} />
+                                )}
+                              </div>
+                              <span className={cn(
+                                "leading-snug transition-colors",
+                                isChecked ? "text-gray-400 line-through" : "text-gray-700"
+                              )}>
+                                {item}
+                              </span>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
