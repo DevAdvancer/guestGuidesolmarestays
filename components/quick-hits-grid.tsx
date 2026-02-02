@@ -41,52 +41,52 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
   return (
     <section>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-        {/* WiFi Card - Blue - #3b82f6 */}
+        {/* WiFi Card */}
         <div className="flex justify-center">
           <CardFlip
             title="WiFi Access"
             subtitle={wifi.network}
             description={`Password: ${wifi.password}`}
-            color="#3b82f6"
+            color="#556D78"
             icon={Wifi}
             actionLabel={copiedWifi ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(wifi.password, setCopiedWifi)}
           />
         </div>
 
-        {/* Door Code Card - Violet - #8b5cf6 */}
+        {/* Door Code Card */}
         <div className="flex justify-center">
           <CardFlip
             title="Door Code"
             subtitle="Access PIN"
             description={`Your code: ${doorCode}`}
-            color="#8b5cf6"
+            color="#556D78"
             icon={KeyRound}
             actionLabel={copiedDoor ? "Copied!" : "Tap to copy"}
             onAction={() => handleCopy(doorCode, setCopiedDoor)}
           />
         </div>
 
-        {/* Location Card - Emerald - #10b981 */}
+        {/* Location Card */}
         <div className="flex justify-center">
           <CardFlip
             title="Location"
             subtitle="Property Address"
             description={address}
-            color="#10b981"
+            color="#556D78"
             icon={MapPin}
             actionLabel="Get Directions"
             onAction={handleDirections}
           />
         </div>
 
-        {/* Checkout Card - Amber - #f59e0b */}
+        {/* Checkout Card */}
         <div className="flex justify-center">
           <CardFlip
             title="Check-Out"
             subtitle={checkOutTime}
             description="View departure checklist and instructions."
-            color="#f59e0b"
+            color="#556D78"
             icon={Clock}
             actionLabel="View Instructions"
             onAction={handleCheckout}

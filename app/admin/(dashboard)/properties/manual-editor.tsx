@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import {
   DndContext,
   closestCenter,
@@ -18,16 +17,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  createManualSection,
-  updateManualSection,
-  deleteManualSection,
-  createManualItem,
-  updateManualItem,
-  deleteManualItem,
-  reorderManualSections,
-  reorderManualItems,
-} from "@/actions/properties";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,15 +37,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { usePropertyEditor } from "./components/property-editor-context";
+import { useState } from "react";
 
-interface ManualEditorProps {
-  propertyId: string;
-  sections: (ManualSection & { items: ManualItem[] })[];
-}
-
-export function ManualEditor({ propertyId, sections: initialSections }: ManualEditorProps) {
-  const [isPending, startTransition] = useTransition();
-  const [sections, setSections] = useState(initialSections);
+export function ManualEditor() {
+  const {
+    manualSections,
+    addManualSection,
+    updateManualSection,
+    deleteManualSection,
+    reorderManualSectionsList,
+    addManualItem,
+    updateManualItem,
+    deleteManualItem,
+    reorderManualItemsList
+  } = usePropertyEditor();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -65,72 +60,14 @@ export function ManualEditor({ propertyId, sections: initialSections }: ManualEd
     })
   );
 
-  const handleAddSection = () => {
-    startTransition(async () => {
-      await createManualSection({
-        propertyId,
-        title: "New Section",
-        subtitle: "",
-        icon: "BookOpen",
-        checklist: null,
-        sortOrder: sections.length,
-      });
-    });
-  };
-
-  const handleUpdateSection = (id: number, data: Partial<ManualSection>) => {
-    startTransition(async () => {
-      await updateManualSection(id, data);
-    });
-  };
-
-  const handleDeleteSection = (id: number) => {
-    startTransition(async () => {
-      await deleteManualSection(id, propertyId);
-    });
-  };
-
   const handleSectionDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = sections.findIndex((s) => s.id === active.id);
-      const newIndex = sections.findIndex((s) => s.id === over.id);
-      const newSections = arrayMove(sections, oldIndex, newIndex);
-      setSections(newSections);
-
-      startTransition(async () => {
-        await reorderManualSections(propertyId, newSections.map((s) => s.id));
-      });
+      const oldIndex = manualSections.findIndex((s) => s.id === active.id);
+      const newIndex = manualSections.findIndex((s) => s.id === over.id);
+      const newSections = arrayMove(manualSections, oldIndex, newIndex);
+      reorderManualSectionsList(newSections);
     }
-  };
-
-  const handleAddItem = (sectionId: number) => {
-    startTransition(async () => {
-      await createManualItem(
-        {
-          sectionId,
-          label: "New Item",
-          value: "",
-          icon: "Info",
-          bullets: null,
-          highlight: false,
-          sortOrder: 0,
-        },
-        propertyId
-      );
-    });
-  };
-
-  const handleUpdateItem = (id: number, data: Partial<ManualItem>) => {
-    startTransition(async () => {
-      await updateManualItem(id, data, propertyId);
-    });
-  };
-
-  const handleDeleteItem = (id: number) => {
-    startTransition(async () => {
-      await deleteManualItem(id, propertyId);
-    });
   };
 
   const handleItemDragEnd = (sectionId: number, items: ManualItem[], event: DragEndEvent) => {
@@ -139,17 +76,7 @@ export function ManualEditor({ propertyId, sections: initialSections }: ManualEd
       const oldIndex = items.findIndex((i) => i.id === active.id);
       const newIndex = items.findIndex((i) => i.id === over.id);
       const newItems = arrayMove(items, oldIndex, newIndex);
-
-      // Update local state
-      setSections((prev) =>
-        prev.map((s) =>
-          s.id === sectionId ? { ...s, items: newItems } : s
-        )
-      );
-
-      startTransition(async () => {
-        await reorderManualItems(propertyId, sectionId, newItems.map((i) => i.id));
-      });
+      reorderManualItemsList(sectionId, newItems);
     }
   };
 
@@ -160,13 +87,13 @@ export function ManualEditor({ propertyId, sections: initialSections }: ManualEd
           <h2 className="text-xl font-semibold text-gray-900">House Manual</h2>
           <p className="text-gray-500 text-sm">Drag to reorder sections and items</p>
         </div>
-        <Button onClick={handleAddSection} disabled={isPending} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
+        <Button onClick={addManualSection} className="bg-gradient-to-r from-amber-500 to-orange-500 text-white">
           <Plus className="h-4 w-4 mr-2" />
           Add Section
         </Button>
       </div>
 
-      {sections.length === 0 ? (
+      {manualSections.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500 shadow-sm">
           No manual sections yet. Add your first section.
         </div>
@@ -176,19 +103,18 @@ export function ManualEditor({ propertyId, sections: initialSections }: ManualEd
           collisionDetection={closestCenter}
           onDragEnd={handleSectionDragEnd}
         >
-          <SortableContext items={sections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext items={manualSections.map((s) => s.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-3">
-              {sections.map((section) => (
+              {manualSections.map((section) => (
                 <SortableSection
                   key={section.id}
                   section={section}
-                  propertyId={propertyId}
                   sensors={sensors}
-                  onUpdateSection={handleUpdateSection}
-                  onDeleteSection={handleDeleteSection}
-                  onAddItem={handleAddItem}
-                  onUpdateItem={handleUpdateItem}
-                  onDeleteItem={handleDeleteItem}
+                  onUpdateSection={updateManualSection}
+                  onDeleteSection={deleteManualSection}
+                  onAddItem={addManualItem}
+                  onUpdateItem={updateManualItem}
+                  onDeleteItem={deleteManualItem}
                   onItemDragEnd={handleItemDragEnd}
                 />
               ))}
@@ -203,7 +129,6 @@ export function ManualEditor({ propertyId, sections: initialSections }: ManualEd
 // Sortable Section Component
 function SortableSection({
   section,
-  propertyId,
   sensors,
   onUpdateSection,
   onDeleteSection,
@@ -213,13 +138,12 @@ function SortableSection({
   onItemDragEnd,
 }: {
   section: ManualSection & { items: ManualItem[] };
-  propertyId: string;
   sensors: any;
   onUpdateSection: (id: number, data: Partial<ManualSection>) => void;
   onDeleteSection: (id: number) => void;
   onAddItem: (sectionId: number) => void;
-  onUpdateItem: (id: number, data: Partial<ManualItem>) => void;
-  onDeleteItem: (id: number) => void;
+  onUpdateItem: (sectionId: number, itemId: number, data: Partial<ManualItem>) => void;
+  onDeleteItem: (sectionId: number, itemId: number) => void;
   onItemDragEnd: (sectionId: number, items: ManualItem[], event: DragEndEvent) => void;
 }) {
   const {
@@ -247,7 +171,7 @@ function SortableSection({
           <div className="flex items-center">
             {/* Drag Handle - Outside AccordionTrigger */}
             <div
-              className="cursor-grab active:cursor-grabbing p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+              className="cursor-grab active:cursor-grabbing p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 bg-white"
               {...attributes}
               {...listeners}
             >
@@ -269,24 +193,16 @@ function SortableSection({
               <div className="space-y-1">
                 <Label className="text-xs text-gray-500">Title</Label>
                 <Input
-                  defaultValue={section.title}
-                  onBlur={(e) => {
-                    if (e.target.value !== section.title) {
-                      onUpdateSection(section.id, { title: e.target.value });
-                    }
-                  }}
+                  value={section.title}
+                  onChange={(e) => onUpdateSection(section.id, { title: e.target.value })}
                   className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs text-gray-500">Subtitle</Label>
                 <Input
-                  defaultValue={section.subtitle || ""}
-                  onBlur={(e) => {
-                    if (e.target.value !== section.subtitle) {
-                      onUpdateSection(section.id, { subtitle: e.target.value });
-                    }
-                  }}
+                  value={section.subtitle || ""}
+                  onChange={(e) => onUpdateSection(section.id, { subtitle: e.target.value })}
                   className="bg-white border-gray-300 text-gray-900"
                 />
               </div>
@@ -333,9 +249,10 @@ function SortableSection({
                       {section.items.map((item) => (
                         <SortableItem
                           key={item.id}
+                          sectionId={section.id}
                           item={item}
-                          onUpdate={(data) => onUpdateItem(item.id, data)}
-                          onDelete={() => onDeleteItem(item.id)}
+                          onUpdate={(data) => onUpdateItem(section.id, item.id, data)}
+                          onDelete={() => onDeleteItem(section.id, item.id)}
                         />
                       ))}
                     </div>
@@ -381,10 +298,12 @@ function SortableSection({
 
 // Sortable Item Component
 function SortableItem({
+  sectionId,
   item,
   onUpdate,
   onDelete,
 }: {
+  sectionId: number;
   item: ManualItem;
   onUpdate: (data: Partial<ManualItem>) => void;
   onDelete: () => void;
@@ -454,12 +373,8 @@ function SortableItem({
           <div className="space-y-1">
             <Label className="text-xs text-gray-500">Label</Label>
             <Input
-              defaultValue={item.label}
-              onBlur={(e) => {
-                if (e.target.value !== item.label) {
-                  onUpdate({ label: e.target.value });
-                }
-              }}
+              value={item.label}
+              onChange={(e) => onUpdate({ label: e.target.value })}
               className="bg-white border-gray-300 h-8 text-sm text-gray-900"
             />
           </div>
@@ -477,12 +392,8 @@ function SortableItem({
       <div className="space-y-1 pl-8">
         <Label className="text-xs text-gray-500">Content</Label>
         <Textarea
-          defaultValue={item.value || ""}
-          onBlur={(e) => {
-            if (e.target.value !== item.value) {
-              onUpdate({ value: e.target.value });
-            }
-          }}
+          value={item.value || ""}
+          onChange={(e) => onUpdate({ value: e.target.value })}
           className="bg-white border-gray-300 text-sm min-h-[60px] text-gray-900"
         />
       </div>
@@ -617,3 +528,5 @@ function ChecklistEditor({ checklist, onChange }: { checklist: string[]; onChang
     </div>
   );
 }
+
+

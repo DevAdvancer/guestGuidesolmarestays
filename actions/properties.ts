@@ -167,3 +167,186 @@ export async function reorderEmergencyItems(propertyId: string, orderedIds: numb
   );
   revalidatePath(`/admin/properties/${propertyId}`);
 }
+
+// ============================================
+// BULK SAVE ACTIONS
+// ============================================
+
+export interface CompletePropertyData {
+  property: Partial<NewProperty>;
+  manual: (NewManualSection & { id?: number; items: (NewManualItem & { id?: number })[] })[];
+  rules: (NewHouseRule & { id?: number })[];
+  emergency: (NewEmergencyItem & { id?: number })[];
+}
+
+export async function savePropertyComplete(propertyId: string, data: CompletePropertyData) {
+  try {
+    // 1. Update Property
+    await db
+      .update(properties)
+      .set({ ...data.property, updatedAt: new Date() })
+      .where(eq(properties.id, propertyId));
+
+    // 2. Process Manual Sections
+    const existingSections = await db.select().from(manualSections).where(eq(manualSections.propertyId, propertyId));
+    const existingSectionIds = existingSections.map((s) => s.id);
+    const incomingSectionIds = data.manual.filter((s) => s.id && s.id > 0).map((s) => s.id as number);
+    const sectionsToDelete = existingSectionIds.filter((id) => !incomingSectionIds.includes(id));
+
+    if (sectionsToDelete.length > 0) {
+      for (const sectionId of sectionsToDelete) {
+        await db.delete(manualSections).where(eq(manualSections.id, sectionId));
+      }
+    }
+
+    for (let i = 0; i < data.manual.length; i++) {
+      const sectionData = data.manual[i];
+      let sectionId = sectionData.id;
+
+      if (sectionId && sectionId > 0) {
+        await db
+          .update(manualSections)
+          .set({
+            title: sectionData.title,
+            subtitle: sectionData.subtitle,
+            icon: sectionData.icon,
+            checklist: sectionData.checklist,
+            sortOrder: i,
+          })
+          .where(eq(manualSections.id, sectionId));
+      } else {
+        const [newSection] = await db
+          .insert(manualSections)
+          .values({
+            propertyId,
+            title: sectionData.title,
+            subtitle: sectionData.subtitle,
+            icon: sectionData.icon,
+            checklist: sectionData.checklist,
+            sortOrder: i,
+          })
+          .returning();
+        sectionId = newSection.id;
+      }
+
+      // Process Items for this section
+      const items = sectionData.items || [];
+      if (sectionData.id && sectionData.id > 0) {
+        const existingItems = await db.select().from(manualItems).where(eq(manualItems.sectionId, sectionId));
+        const existingItemIds = existingItems.map(item => item.id);
+        const incomingItemIds = items.filter(item => item.id && item.id > 0).map(item => item.id as number);
+        const itemsToDelete = existingItemIds.filter(id => !incomingItemIds.includes(id));
+
+        if (itemsToDelete.length > 0) {
+          for (const itemId of itemsToDelete) {
+            await db.delete(manualItems).where(eq(manualItems.id, itemId));
+          }
+        }
+      }
+
+      for (let j = 0; j < items.length; j++) {
+        const itemData = items[j];
+        if (itemData.id && itemData.id > 0) {
+          await db.update(manualItems).set({
+            label: itemData.label,
+            value: itemData.value,
+            icon: itemData.icon,
+            bullets: itemData.bullets,
+            highlight: itemData.highlight,
+            sortOrder: j,
+            sectionId: sectionId
+          }).where(eq(manualItems.id, itemData.id));
+        } else {
+          await db.insert(manualItems).values({
+            sectionId: sectionId,
+            label: itemData.label,
+            value: itemData.value,
+            icon: itemData.icon,
+            bullets: itemData.bullets,
+            highlight: itemData.highlight,
+            sortOrder: j,
+          });
+        }
+      }
+    }
+
+    // 3. Process House Rules
+    const existingRules = await db.select().from(houseRules).where(eq(houseRules.propertyId, propertyId));
+    const existingRuleIds = existingRules.map(r => r.id);
+    const incomingRuleIds = data.rules.filter(r => r.id && r.id > 0).map(r => r.id as number);
+    const rulesToDelete = existingRuleIds.filter(id => !incomingRuleIds.includes(id));
+
+    if (rulesToDelete.length > 0) {
+      for (const id of rulesToDelete) {
+        await db.delete(houseRules).where(eq(houseRules.id, id));
+      }
+    }
+
+    for (let i = 0; i < data.rules.length; i++) {
+      const rule = data.rules[i];
+      if (rule.id && rule.id > 0) {
+        await db.update(houseRules).set({
+          label: rule.label,
+          icon: rule.icon,
+          sortOrder: i
+        }).where(eq(houseRules.id, rule.id));
+      } else {
+        await db.insert(houseRules).values({
+          propertyId,
+          label: rule.label,
+          icon: rule.icon,
+          sortOrder: i
+        });
+      }
+    }
+
+    // 4. Process Emergency Items
+    const existingEmergency = await db.select().from(emergencyItems).where(eq(emergencyItems.propertyId, propertyId));
+    const existingEmergencyIds = existingEmergency.map(r => r.id);
+    const incomingEmergencyIds = data.emergency.filter(r => r.id && r.id > 0).map(r => r.id as number);
+    const emergencyToDelete = existingEmergencyIds.filter(id => !incomingEmergencyIds.includes(id));
+
+    if (emergencyToDelete.length > 0) {
+      for (const id of emergencyToDelete) {
+        await db.delete(emergencyItems).where(eq(emergencyItems.id, id));
+      }
+    }
+
+    for (let i = 0; i < data.emergency.length; i++) {
+      const item = data.emergency[i];
+      if (item.id && item.id > 0) {
+        await db.update(emergencyItems).set({
+          title: item.title,
+          description: item.description,
+          icon: item.icon,
+          actionLabel: item.actionLabel,
+          action: item.action,
+          link: item.link,
+          address: item.address,
+          urgent: item.urgent,
+          sortOrder: i
+        }).where(eq(emergencyItems.id, item.id));
+      } else {
+        await db.insert(emergencyItems).values({
+          propertyId,
+          title: item.title,
+          description: item.description,
+          icon: item.icon,
+          actionLabel: item.actionLabel,
+          action: item.action,
+          link: item.link,
+          address: item.address,
+          urgent: item.urgent,
+          sortOrder: i
+        });
+      }
+    }
+
+    revalidatePath(`/admin/properties/${propertyId}`);
+    revalidatePath("/admin/properties");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to save property complete:", error);
+    throw error;
+  }
+}

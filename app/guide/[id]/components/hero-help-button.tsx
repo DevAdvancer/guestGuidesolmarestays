@@ -23,7 +23,7 @@ export function HeroHelpButton({ contactPhone = "+18052426411" }: HeroHelpButton
       <Button
         onClick={() => setOpen(true)}
         variant="outline"
-        className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20 hover:text-white font-medium text-lg px-10 py-3 h-auto rounded-full transition-all border"
+        className="bg-white border-black text-black hover:bg-gray-50 hover:text-black font-medium text-lg px-10 py-3 h-auto rounded-full transition-all border"
       >
         Help
       </Button>

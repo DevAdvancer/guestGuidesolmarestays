@@ -23,9 +23,9 @@ export function ContactModal({ hostName, hostPhone, hostEmail }: ContactModalPro
         onClick={() => setIsOpen(true)}
         className={cn(
           "fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-xl",
-          "bg-gradient-to-r from-amber-500 to-orange-500",
-          "flex items-center justify-center text-white",
-          "hover:scale-105 transition-transform z-50"
+          "bg-white border border-black",
+          "flex items-center justify-center text-black",
+          "hover:scale-105 transition-transform z-50 hover:bg-gray-50"
         )}
       >
         <MessageCircle className="h-6 w-6" />

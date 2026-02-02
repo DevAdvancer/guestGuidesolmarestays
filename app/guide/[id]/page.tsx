@@ -75,42 +75,42 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const { property, rules, sections, emergency } = data;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f8f7f5' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F5F5DC' }}>
       {/* Sticky Header */}
       <Header contactPhone={property.hostPhone || undefined} />
 
       {/* Hero Section - Fullscreen style with centered content */}
-      <section className="relative min-h-[100dvh] flex items-center justify-start mt-0">
+      {/* Hero Section - Layered Design */}
+      <section className="relative h-[85vh] w-full">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${property.heroImage || '/images/hero-property.jpg'})`,
           }}
         >
-          {/* Main dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/40" />
-          {/* Gradient at bottom for smooth transition */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+          {/* Main dark overlay for text readability (optional, kept light for image focus) */}
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
 
-        <div className="relative z-10 flex flex-col items-start justify-center p-6 md:p-12 lg:p-20 text-left w-full h-full space-y-8 pt-20 max-w-7xl mx-auto">
-          <div className="space-y-4 max-w-5xl">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white tracking-tight text-balance leading-tight drop-shadow-md">
+        {/* Floating White Content Box - Overlapping Bottom Edge */}
+        <div className="absolute bottom-0 left-1/2 z-20 w-[90%] max-w-4xl -translate-x-1/2 translate-y-1/2 rounded-3xl bg-white p-8 text-center shadow-xl md:p-12">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-serif font-bold tracking-tight text-gray-900 md:text-6xl text-balance">
               {property.title}
             </h1>
-            <p className="text-2xl md:text-3xl text-white/90 font-medium max-w-3xl text-balance drop-shadow-sm">
+            <p className="text-xl font-medium text-gray-600 md:text-2xl text-balance">
               {property.subtitle || "Your guide to a perfect stay"}
             </p>
           </div>
 
-          <div className="pt-4">
+          <div className="mt-8 flex justify-center">
             <HeroHelpButton contactPhone={property.hostPhone || undefined} />
           </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <main className="px-4 py-8 max-w-2xl mx-auto space-y-8">
+      <main className="px-4 pb-8 pt-40 max-w-2xl mx-auto space-y-8">
         {/* Quick Info Cards with Flip Effect */}
         <QuickHitsGrid
           wifi={{
