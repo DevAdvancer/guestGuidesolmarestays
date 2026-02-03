@@ -11,9 +11,9 @@ export function VipCarousel({ vendors }: VipCarouselProps) {
   return (
     <div className="relative w-full overflow-hidden">
       {/* Visual Cue: Overflow visible to encourage scrolling */}
-      <div className="flex overflow-x-auto gap-6 px-4 pb-8 pt-4 scrollbar-hide snap-x snap-mandatory">
+      <div className="flex overflow-x-auto gap-5 px-4 md:px-6 pb-8 pt-4 scrollbar-hide snap-x snap-mandatory scroll-pl-4 md:scroll-pl-6">
         {vendors.map((vendor) => (
-          <div key={vendor.id} className="snap-center flex-shrink-0 w-[85vw] sm:w-[320px]">
+          <div key={vendor.id} className="snap-start flex-shrink-0 w-[80vw] sm:w-[320px]">
             <VipFlipCard vendor={vendor} />
           </div>
         ))}

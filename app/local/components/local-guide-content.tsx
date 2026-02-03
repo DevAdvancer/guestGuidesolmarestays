@@ -18,17 +18,15 @@ export function LocalGuideContent({ vipVendors, standardVendors }: LocalGuideCon
   return (
     <div className="min-h-screen bg-[#fdf9f8]">
       {/* 1. Hero Section */}
-      <div className="mb-16">
+      <div className="mb-10">
         <LocalHero />
       </div>
 
       {/* 2. VIP Guest Exclusives (Carousel) */}
       {vipVendors.length > 0 && (
         <section className="py-8 border-b border-[#e5e7eb]/50">
-          <div className="max-w-7xl mx-auto px-4 md:px-6">
-            {/* Header purely for semantic structure, design implies carousel is immediate */}
-            <VipCarousel vendors={vipVendors} />
-          </div>
+          {/* Header purely for semantic structure, design implies carousel is immediate */}
+          <VipCarousel vendors={vipVendors} />
         </section>
       )}
 
