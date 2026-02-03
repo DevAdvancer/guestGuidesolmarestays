@@ -13,7 +13,7 @@ export function FooterCTA({ guideLink }: FooterCTAProps) {
   return (
     <section className="relative h-64 mt-8">
       <Image
-        src="/images/local-lifestyle.jpg"
+        src="/images/hero.jpg"
         alt="Local dining and activities"
         fill
         className="object-cover"

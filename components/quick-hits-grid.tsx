@@ -11,10 +11,11 @@ interface QuickHitsProps {
   }
   doorCode: string
   address: string
+  addressLink?: string | null
   checkOutTime: string
 }
 
-export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHitsProps) {
+export function QuickHitsGrid({ wifi, doorCode, address, addressLink, checkOutTime }: QuickHitsProps) {
   const [copiedWifi, setCopiedWifi] = useState(false)
   const [copiedDoor, setCopiedDoor] = useState(false)
 
@@ -25,6 +26,11 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
   }
 
   const handleDirections = () => {
+    if (addressLink) {
+      window.open(addressLink, "_blank")
+      return
+    }
+
     const encodedAddress = encodeURIComponent(address)
     const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())
     if (isIOS) {
@@ -58,7 +64,7 @@ export function QuickHitsGrid({ wifi, doorCode, address, checkOutTime }: QuickHi
         <div className="flex justify-center">
           <CardFlip
             title="WiFi Access"
-            subtitle={wifi.network}
+            subtitle={`Network: ${wifi.network}`}
             description={`Password: ${wifi.password}`}
             color="#64748b"
             icon={Wifi}

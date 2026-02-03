@@ -25,7 +25,7 @@ export function QuickInfoGrid({
       <InfoCard
         icon={Wifi}
         label="WiFi"
-        value={wifiNetwork || "Not set"}
+        value={wifiNetwork ? `Network: ${wifiNetwork}` : "Not set"}
         secret={wifiPassword}
         secretLabel="Password"
       />

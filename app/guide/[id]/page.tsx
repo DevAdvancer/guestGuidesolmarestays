@@ -119,6 +119,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
             }}
             doorCode={property.doorCode || "Contact Host"}
             address={property.address}
+            addressLink={property.addressLink}
             checkOutTime={property.checkOutTime || "11:00 AM"}
           />
 

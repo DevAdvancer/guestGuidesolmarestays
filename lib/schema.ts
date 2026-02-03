@@ -24,6 +24,7 @@ export const properties = pgTable("properties", {
   heroImage: text("hero_image"), // URL or base64
   address: text("address").notNull(),
   pin: text("pin").notNull().unique(), // Access PIN
+  addressLink: text("address_link"), // Google Maps or Apple Maps Link
 
   // WiFi
   wifiNetwork: text("wifi_network"),

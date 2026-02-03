@@ -368,6 +368,7 @@ export async function duplicateProperty(propertyId: string) {
       // description: sourceProperty.description, // Not in schema
       address: sourceProperty.address,
       heroImage: sourceProperty.heroImage,
+      addressLink: sourceProperty.addressLink,
       hostName: sourceProperty.hostName,
       hostPhone: sourceProperty.hostPhone,
       hostEmail: sourceProperty.hostEmail,

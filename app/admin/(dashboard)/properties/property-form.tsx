@@ -65,6 +65,17 @@ export function PropertyForm() {
         </div>
 
         <div className="space-y-2">
+          <Label htmlFor="addressLink" className="text-gray-700">Google Maps Link (Optional)</Label>
+          <Input
+            id="addressLink"
+            value={propertyData.addressLink || ""}
+            onChange={(e) => handleChange("addressLink", e.target.value)}
+            placeholder="https://maps.google.com/..."
+            className="bg-gray-50 border-gray-300 text-gray-900 placeholder:text-gray-400"
+          />
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="heroImage" className="text-gray-700">Hero Image URL</Label>
           <Input
             id="heroImage"
