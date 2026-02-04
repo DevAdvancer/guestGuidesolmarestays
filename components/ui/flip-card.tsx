@@ -34,13 +34,13 @@ export default function CardFlip({
   // Default Front Content (Centered layout with title on top)
   const DefaultFrontAnimation = () => (
     <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
-      <h3 className="text-xl font-bold tracking-tight text-[#556D78] mb-4 text-center">
+      <h3 className="text-2xl font-bold tracking-tight text-[#556D78] mb-4 text-center">
         {title}
       </h3>
       <div className="flex items-center justify-center rounded-2xl bg-blue-50 p-5 shadow-sm">
         <Icon className="h-10 w-10" style={{ color }} />
       </div>
-      <p className="mt-4 text-sm font-medium text-zinc-500 text-center">
+      <p className="mt-4 text-base font-medium text-zinc-500 text-center">
         {subtitle}
       </p>
     </div>
@@ -106,13 +106,13 @@ export default function CardFlip({
           <div className="relative z-10 flex-1 space-y-5 flex flex-col justify-center items-center text-center">
             <div className="space-y-2 w-full">
               <div className="flex flex-col items-center justify-center gap-4">
-                <h3 className="text-xl leading-snug font-serif font-medium tracking-tight text-center text-zinc-900 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-white">
+                <h3 className="text-2xl leading-snug font-serif font-medium tracking-tight text-center text-zinc-900 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-white">
                   {title}
                 </h3>
               </div>
             </div>
             {description && (
-              <p className="line-clamp-4 text-sm text-zinc-500 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-zinc-400">
+              <p className="line-clamp-4 text-base text-zinc-500 transition-all duration-500 group-hover:translate-y-[-2px] dark:text-zinc-400">
                 {description}
               </p>
             )}
@@ -128,7 +128,7 @@ export default function CardFlip({
                 return (
                   <div
                     key={feature}
-                    className="flex items-center gap-3 text-sm text-zinc-700 transition-all duration-500 dark:text-zinc-300"
+                    className="flex items-center gap-3 text-base text-zinc-700 transition-all duration-500 dark:text-zinc-300"
                     style={{
                       transform: isFlipped ? "translateX(0)" : "translateX(-10px)",
                       opacity: isFlipped ? 1 : 0,
@@ -163,7 +163,7 @@ export default function CardFlip({
                 "hover:scale-[1.02] hover:cursor-pointer",
               )}
             >
-              <span className="text-sm font-medium text-zinc-900 transition-colors duration-300 dark:text-white">
+              <span className="text-base font-medium text-zinc-900 transition-colors duration-300 dark:text-white">
                 {actionLabel}
               </span>
               <ArrowRight className="h-4 w-4 transition-all duration-300 group-hover/start:translate-x-1" style={{ color }} />
