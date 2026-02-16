@@ -6,6 +6,7 @@ import { Building2, Plus, Pencil, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeletePropertyButton } from "./components/delete-property-button";
 import { DuplicatePropertyButton } from "./components/duplicate-property-button";
+import { SharePropertyButton } from "./components/share-property-button";
 
 async function getAllProperties() {
   return await db
@@ -74,8 +75,9 @@ export default async function PropertiesListPage() {
                 >
                   {property.isActive ? "Active" : "Inactive"}
                 </span>
-                <Button asChild variant="ghost" size="icon" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100">
-                  <Link href={`/?pin=${property.pin}`} target="_blank">
+                <SharePropertyButton propertyId={property.id} propertyTitle={property.title} />
+                <Button asChild variant="ghost" size="icon" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100" title="Open Guide">
+                  <Link href={`/guide/${property.id}`} target="_blank">
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                 </Button>

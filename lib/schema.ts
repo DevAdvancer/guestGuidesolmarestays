@@ -164,7 +164,7 @@ export const localGuideVendors = pgTable("local_guide_vendors", {
   vendorName: text("vendor_name").notNull(),
   category: text("category").notNull(), // 'coffee', 'dinner', 'play', 'shops'
   isVipSponsor: boolean("is_vip_sponsor").default(false),
-  priceLevel: text("price_level").default("$"), // $, $$, $$$
+  priceLevel: text("price_level").default("Free"), // Free, $, $$, $$$
   iconType: text("icon_type").default("Coffee"), // Lucide icon name
   description: text("description"), // Max 150 chars
   vipDealText: text("vip_deal_text"), // Only for VIP sponsors

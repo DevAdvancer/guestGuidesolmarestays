@@ -13,10 +13,16 @@ import { RulesRow } from "./components/rules-row";
 import { ManualAccordion } from "./components/manual-accordion";
 import { EmergencySection } from "./components/emergency-section";
 import { ContactModal } from "./components/contact-modal";
+// Update import
+// Update import
+import { verifyGuestToken } from "@/lib/guest-auth";
+import { PinEntryForm } from "@/components/guide/pin-entry-form";
 import { HeroHelpButton } from "./components/hero-help-button";
+import { UrlCleaner } from "@/components/guide/url-cleaner";
 
 interface GuidePageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ access?: string }>;
 }
 
 async function getGuideData(id: string) {
@@ -64,8 +70,13 @@ async function getGuideData(id: string) {
   };
 }
 
-export default async function GuidePage({ params }: GuidePageProps) {
+export default async function GuidePage({ params, searchParams }: GuidePageProps) {
   const { id } = await params;
+  const { access } = await searchParams;
+
+  // Verify the token from the URL
+  const isAuthenticated = await verifyGuestToken(access || "", id);
+
   const data = await getGuideData(id);
 
   if (!data) {
@@ -73,6 +84,16 @@ export default async function GuidePage({ params }: GuidePageProps) {
   }
 
   const { property, rules, sections, emergency } = data;
+
+  if (!isAuthenticated) {
+    return (
+      <PinEntryForm
+        propertyId={id}
+        propertyTitle={property.title}
+        propertyImage={property.heroImage}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#fdf9f8' }}>

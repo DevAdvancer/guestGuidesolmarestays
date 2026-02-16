@@ -166,7 +166,7 @@ export function LocalGuideEditor({ initialVendors }: LocalGuideEditorProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext id="dnd-vip-list" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={vipVendors.map(v => v.id)} strategy={verticalListSortingStrategy}>
                 {vipVendors.map(vendor => (
                   <SortableVendorCard
@@ -190,7 +190,7 @@ export function LocalGuideEditor({ initialVendors }: LocalGuideEditorProps) {
           {standardVendors.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No standard recommendations yet. Add your first vendor!</p>
           ) : (
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext id="dnd-standard-list" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={standardVendors.map(v => v.id)} strategy={verticalListSortingStrategy}>
                 {standardVendors.map(vendor => (
                   <SortableVendorCard

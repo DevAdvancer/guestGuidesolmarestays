@@ -26,6 +26,7 @@ const CATEGORIES = [
 ];
 
 const PRICE_LEVELS = [
+  { value: "Free", label: "Free"},
   { value: "$", label: "$" },
   { value: "$$", label: "$$" },
   { value: "$$$", label: "$$$" },
