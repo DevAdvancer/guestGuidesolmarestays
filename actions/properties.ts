@@ -36,29 +36,6 @@ export async function deleteProperty(id: string) {
   redirect("/admin/properties");
 }
 
-export async function checkPinAvailability(pin: string, currentPropertyId?: string) {
-  // Check if any property uses this PIN
-  const existingProperties = await db
-    .select({ id: properties.id })
-    .from(properties)
-    .where(eq(properties.pin, pin));
-
-  // If no properties found, it's available
-  if (existingProperties.length === 0) {
-    return true;
-  }
-
-  // If we are updating an existing property, checking against itself is okay
-  // So if the only property with this PIN is the current one, it's available
-  if (currentPropertyId) {
-    const usageByOthers = existingProperties.filter(p => p.id !== currentPropertyId);
-    return usageByOthers.length === 0;
-  }
-
-  // If we are creating a new property, any existence means it's unavailable
-  return false;
-}
-
 // ============================================
 // HOUSE RULES ACTIONS
 // ============================================
@@ -402,7 +379,6 @@ export async function duplicateProperty(propertyId: string) {
       // checkInTime: sourceProperty.checkInTime, // Not in schema
       checkOutTime: sourceProperty.checkOutTime,
       localGuideLink: sourceProperty.localGuideLink,
-      pin: Math.floor(1000 + Math.random() * 9000).toString(), // Generate new 4-digit PIN
       isActive: false, // Default to inactive
     }).returning();
 

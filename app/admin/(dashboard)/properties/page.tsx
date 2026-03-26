@@ -60,10 +60,6 @@ export default async function PropertiesListPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg text-gray-900">{property.title}</h3>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <span>PIN: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">{property.pin}</code></span>
-
-                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3">

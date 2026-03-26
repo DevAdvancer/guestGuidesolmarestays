@@ -5,40 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { usePropertyEditor } from "./components/property-editor-context";
-import { useState, useCallback, useEffect } from "react";
-import { checkPinAvailability } from "@/actions/properties";
 
 export function PropertyForm() {
   const { propertyData, updatePropertyData } = usePropertyEditor();
-  const [pinError, setPinError] = useState<string | null>(null);
-  const [isCheckingPin, setIsCheckingPin] = useState(false);
-
-  // Debounced PIN check
-  useEffect(() => {
-    const checkPin = async () => {
-      if (!propertyData.pin || propertyData.pin.length < 4) {
-        setPinError(null);
-        return;
-      }
-
-      setIsCheckingPin(true);
-      try {
-        const isAvailable = await checkPinAvailability(propertyData.pin, propertyData.id);
-        if (!isAvailable) {
-          setPinError("This PIN is already in use by another property.");
-        } else {
-          setPinError(null);
-        }
-      } catch (error) {
-        console.error("Failed to check PIN availability:", error);
-      } finally {
-        setIsCheckingPin(false);
-      }
-    };
-
-    const timeoutId = setTimeout(checkPin, 500);
-    return () => clearTimeout(timeoutId);
-  }, [propertyData.pin, propertyData.id]);
 
   const handleChange = (field: string, value: string | boolean) => {
     updatePropertyData({ [field]: value });
@@ -50,7 +19,7 @@ export function PropertyForm() {
       <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6 shadow-sm">
         <h2 className="text-xl font-semibold text-gray-900 border-b border-gray-200 pb-4">Basic Information</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div className="space-y-2">
             <Label htmlFor="title" className="text-gray-700">Property Name *</Label>
             <Input
@@ -60,26 +29,6 @@ export function PropertyForm() {
               placeholder="Hummingbird House"
               className="bg-gray-50 border-gray-300 text-gray-900 placeholder:text-gray-400"
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="pin" className="text-gray-700">Access PIN *</Label>
-            <div className="relative">
-              <Input
-                id="pin"
-                value={propertyData.pin || ""}
-                onChange={(e) => handleChange("pin", e.target.value)}
-                placeholder="1234"
-                className={`bg-gray-50 border-gray-300 text-gray-900 placeholder:text-gray-400 ${pinError ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-              />
-              {isCheckingPin && (
-                <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-                </div>
-              )}
-            </div>
-            {pinError && (
-              <p className="text-sm text-red-500 mt-1">{pinError}</p>
-            )}
           </div>
         </div>
 

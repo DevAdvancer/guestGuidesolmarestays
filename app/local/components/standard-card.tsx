@@ -53,18 +53,32 @@ export function StandardCard({ vendor }: StandardCardProps) {
       </div>
 
       {/* Action Row (Bottom) */}
-      <div className="absolute bottom-6 left-0 right-0 px-6 flex justify-center gap-3">
+      <div className="absolute bottom-6 left-0 right-0 px-6 flex flex-wrap justify-center gap-2">
         {vendor.websiteUrl && (
           <a href={vendor.websiteUrl} target="_blank" rel="noopener noreferrer">
-            <button className="px-4 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
+            <button className="px-3 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
               Website
             </button>
           </a>
         )}
         {vendor.googleMapsUrl && (
           <a href={vendor.googleMapsUrl} target="_blank" rel="noopener noreferrer">
-            <button className="px-4 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
+            <button className="px-3 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
               Directions
+            </button>
+          </a>
+        )}
+        {vendor.phone && (
+          <a href={`tel:${vendor.phone}`}>
+            <button className="px-3 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
+              Phone
+            </button>
+          </a>
+        )}
+        {vendor.email && (
+          <a href={`mailto:${vendor.email}`}>
+            <button className="px-3 py-1.5 border border-[#556D78] text-[#556D78] text-xs font-medium uppercase tracking-wider rounded transition-colors hover:bg-[#556D78] hover:text-white">
+              Email
             </button>
           </a>
         )}

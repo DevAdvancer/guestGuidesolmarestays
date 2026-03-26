@@ -97,7 +97,7 @@ export function VipFlipCard({ vendor }: VipFlipCardProps) {
           </p>
 
           {/* Links: White text, Underlined */}
-          <div className="flex gap-6 mt-auto">
+          <div className="flex flex-wrap justify-center gap-4 mt-auto">
             {vendor.websiteUrl && (
               <a
                 href={vendor.websiteUrl}
@@ -118,6 +118,24 @@ export function VipFlipCard({ vendor }: VipFlipCardProps) {
                 className="text-sm font-medium text-white underline underline-offset-4 hover:text-white/80"
               >
                 Directions
+              </a>
+            )}
+            {vendor.phone && (
+              <a
+                href={`tel:${vendor.phone}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-sm font-medium text-white underline underline-offset-4 hover:text-white/80"
+              >
+                Phone
+              </a>
+            )}
+            {vendor.email && (
+              <a
+                href={`mailto:${vendor.email}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-sm font-medium text-white underline underline-offset-4 hover:text-white/80"
+              >
+                Email
               </a>
             )}
           </div>

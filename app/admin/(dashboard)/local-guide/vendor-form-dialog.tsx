@@ -2,13 +2,25 @@
 
 import { useForm } from "react-hook-form";
 import { LocalGuideVendor } from "@/lib/schema";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useEffect } from "react";
 
 interface VendorFormDialogProps {
@@ -26,7 +38,7 @@ const CATEGORIES = [
 ];
 
 const PRICE_LEVELS = [
-  { value: "Free", label: "Free"},
+  { value: "Free", label: "Free" },
   { value: "$", label: "$" },
   { value: "$$", label: "$$" },
   { value: "$$$", label: "$$$" },
@@ -57,12 +69,26 @@ interface FormData {
   vipDealText: string;
   websiteUrl: string;
   googleMapsUrl: string;
+  phone: string;
+  email: string;
   isActive: boolean;
   sortOrder: number;
 }
 
-export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorFormDialogProps) {
-  const { register, handleSubmit, reset, watch, setValue, formState: { isSubmitting } } = useForm<FormData>({
+export function VendorFormDialog({
+  open,
+  onOpenChange,
+  vendor,
+  onSave,
+}: VendorFormDialogProps) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm<FormData>({
     defaultValues: {
       vendorName: "",
       category: "coffee",
@@ -73,6 +99,8 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
       vipDealText: "",
       websiteUrl: "",
       googleMapsUrl: "",
+      phone: "",
+      email: "",
       isActive: true,
       sortOrder: 0,
     },
@@ -92,6 +120,8 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
         vipDealText: vendor.vipDealText ?? "",
         websiteUrl: vendor.websiteUrl ?? "",
         googleMapsUrl: vendor.googleMapsUrl ?? "",
+        phone: vendor.phone ?? "",
+        email: vendor.email ?? "",
         isActive: vendor.isActive ?? true,
         sortOrder: vendor.sortOrder ?? 0,
       });
@@ -106,6 +136,8 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
         vipDealText: "",
         websiteUrl: "",
         googleMapsUrl: "",
+        phone: "",
+        email: "",
         isActive: true,
         sortOrder: 0,
       });
@@ -126,18 +158,26 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="vendorName">Vendor Name *</Label>
-            <Input id="vendorName" {...register("vendorName", { required: true })} placeholder="e.g., Oceanside Coffee" />
+            <Input
+              id="vendorName"
+              {...register("vendorName", { required: true })}
+              placeholder="e.g., Oceanside Coffee"
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="category">Category *</Label>
-            <Select value={watch("category")} onValueChange={(value) => setValue("category", value)}>
+            <Select
+              value={watch("category")}
+              onValueChange={(value) => setValue("category", value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map(cat => (
-                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                {CATEGORIES.map((cat) => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -155,13 +195,17 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="priceLevel">Price Level</Label>
-              <Select value={watch("priceLevel")} onValueChange={(value) => setValue("priceLevel", value)}>
+              <Select
+                value={watch("priceLevel")}
+                onValueChange={(value) => setValue("priceLevel", value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRICE_LEVELS.map(price => (
-                    <SelectItem key={price.value} value={price.value}>{price.label}</SelectItem>
+                  {PRICE_LEVELS.map((price) => (
+                    <SelectItem key={price.value} value={price.value}>
+                      {price.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -169,13 +213,17 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
 
             <div className="space-y-2">
               <Label htmlFor="iconType">Icon</Label>
-              <Select value={watch("iconType")} onValueChange={(value) => setValue("iconType", value)}>
+              <Select
+                value={watch("iconType")}
+                onValueChange={(value) => setValue("iconType", value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {ICON_TYPES.map(icon => (
-                    <SelectItem key={icon.value} value={icon.value}>{icon.label}</SelectItem>
+                  {ICON_TYPES.map((icon) => (
+                    <SelectItem key={icon.value} value={icon.value}>
+                      {icon.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -201,18 +249,50 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
                 {...register("vipDealText")}
                 placeholder="e.g., FREE TASTING or 20% OFF"
               />
-              <p className="text-xs text-muted-foreground">Displayed on the back of the flip card</p>
+              <p className="text-xs text-muted-foreground">
+                Displayed on the back of the flip card
+              </p>
             </div>
           )}
 
           <div className="space-y-2">
             <Label htmlFor="websiteUrl">Website URL</Label>
-            <Input id="websiteUrl" type="url" {...register("websiteUrl")} placeholder="https://..." />
+            <Input
+              id="websiteUrl"
+              type="url"
+              {...register("websiteUrl")}
+              placeholder="https://..."
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="googleMapsUrl">Google Maps URL</Label>
-            <Input id="googleMapsUrl" type="url" {...register("googleMapsUrl")} placeholder="https://maps.google.com/..." />
+            <Input
+              id="googleMapsUrl"
+              type="url"
+              {...register("googleMapsUrl")}
+              placeholder="https://maps.google.com/..."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone</Label>
+            <Input
+              id="phone"
+              type="tel"
+              {...register("phone")}
+              placeholder="+1 (555) 123-4567"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              {...register("email")}
+              placeholder="contact@example.com"
+            />
           </div>
 
           <div className="flex items-center justify-between">
@@ -225,7 +305,10 @@ export function VendorFormDialog({ open, onOpenChange, vendor, onSave }: VendorF
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>

@@ -106,7 +106,6 @@ export default async function AdminDashboardPage() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{property.title}</p>
-                    <p className="text-sm text-gray-500">PIN: {property.pin}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">

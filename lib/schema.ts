@@ -1,4 +1,13 @@
-import { pgTable, serial, text, jsonb, timestamp, boolean, integer, uuid } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  jsonb,
+  timestamp,
+  boolean,
+  integer,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 // ============================================
@@ -23,7 +32,6 @@ export const properties = pgTable("properties", {
   subtitle: text("subtitle").default("Your guide to a perfect stay"),
   heroImage: text("hero_image"), // URL or base64
   address: text("address").notNull(),
-  pin: text("pin").notNull().unique(), // Access PIN
   addressLink: text("address_link"), // Google Maps or Apple Maps Link
 
   // WiFi
@@ -56,7 +64,9 @@ export type NewProperty = typeof properties.$inferInsert;
 // ============================================
 export const houseRules = pgTable("house_rules", {
   id: serial("id").primaryKey(),
-  propertyId: uuid("property_id").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  propertyId: uuid("property_id")
+    .notNull()
+    .references(() => properties.id, { onDelete: "cascade" }),
   label: text("label").notNull(),
   icon: text("icon").default("AlertCircle"), // Lucide icon name
   sortOrder: integer("sort_order").default(0),
@@ -70,7 +80,9 @@ export type NewHouseRule = typeof houseRules.$inferInsert;
 // ============================================
 export const manualSections = pgTable("manual_sections", {
   id: serial("id").primaryKey(),
-  propertyId: uuid("property_id").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  propertyId: uuid("property_id")
+    .notNull()
+    .references(() => properties.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   subtitle: text("subtitle"),
   icon: text("icon").default("BookOpen"), // Lucide icon name
@@ -86,7 +98,9 @@ export type NewManualSection = typeof manualSections.$inferInsert;
 // ============================================
 export const manualItems = pgTable("manual_items", {
   id: serial("id").primaryKey(),
-  sectionId: integer("section_id").notNull().references(() => manualSections.id, { onDelete: "cascade" }),
+  sectionId: integer("section_id")
+    .notNull()
+    .references(() => manualSections.id, { onDelete: "cascade" }),
   label: text("label").notNull(),
   value: text("value"), // Rich text or plain
   icon: text("icon").default("Info"),
@@ -103,7 +117,9 @@ export type NewManualItem = typeof manualItems.$inferInsert;
 // ============================================
 export const emergencyItems = pgTable("emergency_items", {
   id: serial("id").primaryKey(),
-  propertyId: uuid("property_id").notNull().references(() => properties.id, { onDelete: "cascade" }),
+  propertyId: uuid("property_id")
+    .notNull()
+    .references(() => properties.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description"),
   icon: text("icon").default("Phone"),
@@ -134,13 +150,16 @@ export const houseRulesRelations = relations(houseRules, ({ one }) => ({
   }),
 }));
 
-export const manualSectionsRelations = relations(manualSections, ({ one, many }) => ({
-  property: one(properties, {
-    fields: [manualSections.propertyId],
-    references: [properties.id],
+export const manualSectionsRelations = relations(
+  manualSections,
+  ({ one, many }) => ({
+    property: one(properties, {
+      fields: [manualSections.propertyId],
+      references: [properties.id],
+    }),
+    items: many(manualItems),
   }),
-  items: many(manualItems),
-}));
+);
 
 export const manualItemsRelations = relations(manualItems, ({ one }) => ({
   section: one(manualSections, {
@@ -170,6 +189,8 @@ export const localGuideVendors = pgTable("local_guide_vendors", {
   vipDealText: text("vip_deal_text"), // Only for VIP sponsors
   websiteUrl: text("website_url"),
   googleMapsUrl: text("google_maps_url"),
+  phone: text("phone"),
+  email: text("email"),
   sortOrder: integer("sort_order").default(0),
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow().notNull(),
